@@ -1,0 +1,26 @@
+body{
+	background-color: white;
+}
+
+.container{
+	width: 400px;
+	margin: auto;
+	text-align: center;
+}
+
+.title{
+	margin-top: 45%;
+}
+
+.footerText{
+	margin-top: 140px;
+}
+
+.footerText2{
+	margin-top: 198px;
+}
+
+.logo{
+	margin-top: 120px;
+	width: 220px;
+}

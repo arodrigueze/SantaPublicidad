@@ -1,0 +1,152 @@
+html, body{height: 100%;}
+
+body{background-color: white;}
+
+.container{
+	margin: auto;
+	padding: 0;
+	height: 100%;
+	width: 1349px;
+}
+
+#nameEmployed{
+	width: 100%;
+}
+
+#awelcomeTitle{
+	float: left;
+	height: 80px;
+}
+
+#awelcomeTitle:hover{
+	background-color: white;
+	border: none;
+	cursor: pointer;
+	margin: 1px;
+}
+
+#welcomeTitle{
+	margin-top:15px; 
+	font-size: 20px;
+}
+
+.footerText{
+	text-align: center;
+}
+
+div#createUserForm{
+	width: 400px;
+	margin: auto;
+	text-align: center;
+	margin-bottom: 100px;
+}
+
+.homeIcon{
+	height: 80px;
+}
+
+#menu{
+	margin:auto;
+	margin-top: 20px;
+	width: 1000px;
+}
+
+footer{
+	margin-top: 100px;
+}
+
+#aHomeLogo{
+	float: right;
+	margin: 0%;
+	padding: 0%;
+}
+
+#aHomeLogo:hover{
+	background-color: white;
+	border: none;
+	margin: 1px;
+}
+
+#filtro{
+	margin: 50px;
+	margin-bottom: 0;
+	width: 22%;
+}
+
+#lista{
+	margin-top: 10px;
+	margin-left: 50px;
+	margin-right: 50px;
+}
+
+#form{
+	margin: auto;
+	margin-top: 50px;
+	width:500px; 
+}
+
+#myUserSee{
+	margin: auto;
+	margin-top: 50px;
+	width:500px;	
+}
+
+#msfind{
+	text-align: center;
+}
+
+.alert{
+	text-align: center;
+}
+
+.scroll {
+	height: auto;
+    max-height: 300px;
+    overflow: auto;
+}
+
+/*****/
+
+.menu2{
+	width: 100%;	
+}
+
+.menu2li{
+	width: 100%;
+}
+
+.botonMenu2{
+	width: 80px;
+	margin: 0;
+	padding: 0;
+}
+
+.botonBack{
+	float: left;
+}
+
+.signout{
+	float: right;
+}
+
+.titleMenu2{
+	float: left;
+	width: 1185px;
+	font-size: 30px;
+	text-align: center;
+	margin: 0;
+	padding: 0;
+}
+/******/
+
+.title1{
+	font-size: 30px;
+	text-align: center;
+	width: 100%;
+}
+
+
+
+
+
+
