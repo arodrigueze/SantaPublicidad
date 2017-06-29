@@ -1,6 +1,7 @@
 //http://www.danstools.com/javascript-obfuscate/index.php
 //pagina webservices
-var page = "http://localhost:8080";
+//var page = "http://localhost:8080";
+var page = "https://agenciasantaaplicacionempresa.herokuapp.com";
 //pagina inicial de la capa de presentacion
 var indexPage = page+"/SantaPublicidadAplicacionEmpresarial/Cliente/";
 //roll de administrador
