@@ -9,7 +9,7 @@ public class ConnectionData {
 	private static String dataBasePass = "";
 	//private static String dataBasePass = "rC(RikRG#C$2";
 	
-	private static String[] urlAccess = {"http://localhost:8080"};
+	private static String[] urlAccess = {"http://localhost:8080","agenciasantaaplicacionempresa.herokuapp.com"};
 	
 	
 	public static String[] getUrlAccess() {
