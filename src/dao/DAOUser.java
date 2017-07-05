@@ -4,6 +4,7 @@ import java.util.List;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 
+import conexion.ConnectionData;
 import vo.Roll;
 import vo.User;
 import vo.UserRoll;
@@ -16,6 +17,7 @@ public class DAOUser {
 			String query="select * from User where active = 1";
 			List<User> users = connection.createQuery(query)
 			        		 .executeAndFetch(User.class);
+			connection.close();
 			return users;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -31,6 +33,7 @@ public class DAOUser {
 					.addParameter("username", username)
 					.addParameter("password", password)
 			        .executeAndFetch(User.class);
+			connection.close();
 			return users.get(0);
 		} catch (Exception e) {
 			if((e+"").equalsIgnoreCase("java.lang.IndexOutOfBoundsException: Index: 0, Size: 0")){
@@ -47,6 +50,7 @@ public class DAOUser {
 		initDriver();
 		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).open()){
 			String query="select * from User where userName = :username";
+			
 			List<User> users = connection.createQuery(query)
 					.addParameter("username", username)
 			        .executeAndFetch(User.class);
@@ -64,6 +68,7 @@ public class DAOUser {
 			 List<Roll> roll = connection.createQuery(query3)
 					.addParameter("id", idRoll)
 			        .executeAndFetch(Roll.class);
+			 connection.close();
 			 return roll.get(0).getName();
 			 
 		} catch (Exception e) {
@@ -84,6 +89,7 @@ public class DAOUser {
 			List<User> users = connection.createQuery(query)
 					.addParameter("id", id)
 			        .executeAndFetch(User.class);
+			connection.close();
 			return users.get(0);
 		} catch (Exception e) {
 			if((e+"").equalsIgnoreCase("java.lang.IndexOutOfBoundsException: Index: 0, Size: 0")){
@@ -103,6 +109,7 @@ public class DAOUser {
 			List<User> users = connection.createQuery(query)
 					.addParameter("username", username)
 			        .executeAndFetch(User.class);
+			connection.close();
 			return users.get(0);
 		} catch (Exception e) {
 			if((e+"").equalsIgnoreCase("java.lang.IndexOutOfBoundsException: Index: 0, Size: 0")){
@@ -130,6 +137,7 @@ public class DAOUser {
 					.addParameter("active",usuario.isActive())
 					.executeUpdate();
 			connection.commit();
+			connection.close();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -147,6 +155,7 @@ public class DAOUser {
 					.addParameter("idUser", idUsuario)
 					.executeUpdate();
 			connection.commit();
+			connection.close();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -171,6 +180,7 @@ public class DAOUser {
 					.addParameter("active",true)
 					.executeUpdate();
 			connection.commit();
+			connection.close();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -190,6 +200,7 @@ public class DAOUser {
 					.addParameter("idUser",usuario.getIdUser())
 					.executeUpdate();
 			connection.commit();
+			connection.close();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -208,6 +219,7 @@ public class DAOUser {
 					.addParameter("active",false)
 					.executeUpdate();
 			connection.commit();
+			connection.close();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();

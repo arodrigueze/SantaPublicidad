@@ -5,6 +5,7 @@ import java.util.List;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 
+import conexion.ConnectionData;
 import vo.UserRoll;
 
 public class DAOUserRoll {
@@ -15,6 +16,7 @@ public class DAOUserRoll {
 			String query="select * from User_Role";
 			List<UserRoll> usersrolls = connection.createQuery(query)
 			        		 .executeAndFetch(UserRoll.class);
+			connection.close();
 			return usersrolls;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -32,6 +34,7 @@ public class DAOUserRoll {
 					.addParameter("idRol", rol)
 					.executeUpdate();
 			connection.commit();
+			connection.close();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -49,6 +52,7 @@ public class DAOUserRoll {
 					.addParameter("idUser", idUsuario)
 					.executeUpdate();
 			connection.commit();
+			connection.close();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();

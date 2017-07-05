@@ -5,6 +5,7 @@ import java.util.List;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 
+import conexion.ConnectionData;
 import vo.Address;
 
 public class DAOAddress {
@@ -15,6 +16,7 @@ public class DAOAddress {
 			String query="select * from Address";
 			List<Address> address = connection.createQuery(query)
 			        		 .executeAndFetch(Address.class);
+			connection.close();
 			return address;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -29,6 +31,7 @@ public class DAOAddress {
 			List<Address> address = connection.createQuery(query)
 					.addParameter("id", idAddress)
 			        .executeAndFetch(Address.class);
+			connection.close();
 			return address.get(0);
 		} catch (Exception e) {
 			if((e+"").equalsIgnoreCase("java.lang.IndexOutOfBoundsException: Index: 0, Size: 0")){
@@ -51,6 +54,7 @@ public class DAOAddress {
 						.addParameter("idcy", address.getIdCity())
 						.addParameter("idct", address.getIdClient())
 						.executeUpdate();
+				connection.close();
 				connection.commit();
 				return true;
 			}else if(address.getIdClient()==0){
@@ -61,9 +65,11 @@ public class DAOAddress {
 						.addParameter("idcy", address.getIdCity())
 						.executeUpdate();
 				connection.commit();
+				connection.close();
 				return true;
 			}else{
 				System.out.println("Error debido a que los id de provedor o cliente son erroneos");
+				connection.close();
 				return false;
 			}
 		} catch (Exception e) {
@@ -82,6 +88,7 @@ public class DAOAddress {
 					.addParameter("id", idAddress)
 					.executeUpdate();
 			connection.commit();
+			connection.close();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -103,6 +110,7 @@ public class DAOAddress {
 						.addParameter("idc", address.getIdClient())
 						.executeUpdate();
 				connection.commit();
+				connection.close();
 				return true;
 			}else  if(address.getIdClient()==0){
 				String query="update Address set address = :address, idProvider = :idp, idCity = :idcy where Address.idAddress = :id";
@@ -113,6 +121,7 @@ public class DAOAddress {
 						.addParameter("idcy", address.getIdCity())
 						.executeUpdate();
 				connection.commit();
+				connection.close();
 				return true;
 			}else{
 				return false;

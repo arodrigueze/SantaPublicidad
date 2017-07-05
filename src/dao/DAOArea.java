@@ -3,6 +3,8 @@ package dao;
 import java.util.List;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
+
+import conexion.ConnectionData;
 import vo.Area;
 
 public class DAOArea {
@@ -13,6 +15,7 @@ public class DAOArea {
 			String query="select * from Area";
 			List<Area> areas = connection.createQuery(query)
 			        		 .executeAndFetch(Area.class);
+			connection.close();
 			return areas;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -27,6 +30,7 @@ public class DAOArea {
 			List<Area> area = connection.createQuery(query)
 					.addParameter("idArea", areaId)
 			        .executeAndFetch(Area.class);
+			connection.close();
 			return area.get(0);
 		} catch (Exception e) {
 			if((e+"").equalsIgnoreCase("java.lang.IndexOutOfBoundsException: Index: 0, Size: 0")){
@@ -47,6 +51,7 @@ public class DAOArea {
 					.addParameter("name", name)
 					.executeUpdate();
 			connection.commit();
+			connection.close();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -64,6 +69,7 @@ public class DAOArea {
 					.addParameter("id", idArea)
 					.executeUpdate();
 			connection.commit();
+			connection.close();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -82,6 +88,7 @@ public class DAOArea {
 					.addParameter("name",area.getName())
 					.executeUpdate();
 			connection.commit();
+			connection.close();
 			return true;
 			
 		} catch (Exception e) {

@@ -11,7 +11,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import org.json.JSONObject;
-import dao.ConnectionData;
+
+import conexion.ConnectionData;
 import logic.LogicProject;
 import logic.LogicLoginAuthent;
 import vo.Project;

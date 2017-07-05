@@ -14,7 +14,7 @@ import javax.ws.rs.core.Response;
 
 import org.json.JSONObject;
 
-import dao.ConnectionData;
+import conexion.ConnectionData;
 import logic.LogicCity;
 import logic.LogicLoginAuthent;
 import vo.City;
