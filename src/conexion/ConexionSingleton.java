@@ -11,7 +11,8 @@ public class ConexionSingleton {
 		try {
 			_instance = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).open();
 		} catch (Exception e) {
-			// TODO: handle exception
+			System.out.println("Error en la conexion con la base de datos.");
+			System.out.println(""+e.getMessage());
 		}
 	}
 

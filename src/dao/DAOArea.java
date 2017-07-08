@@ -1,21 +1,17 @@
 package dao;
 
 import java.util.List;
-import org.sql2o.Connection;
-import org.sql2o.Sql2o;
-
-import conexion.ConnectionData;
+import conexion.ConexionSingleton;
 import vo.Area;
 
 public class DAOArea {
 	
 	public static List<Area> getAreas(){
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).open()){
+		try {
 			String query="select * from Area";
-			List<Area> areas = connection.createQuery(query)
+			List<Area> areas = ConexionSingleton.getInstance().createQuery(query)
 			        		 .executeAndFetch(Area.class);
-			connection.close();
 			return areas;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -25,12 +21,11 @@ public class DAOArea {
 	
 	public static Area getAreaByIdArea(long areaId) {
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).open()){
+		try {
 			String query="select * from Area where idArea = :idArea";
-			List<Area> area = connection.createQuery(query)
+			List<Area> area = ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("idArea", areaId)
 			        .executeAndFetch(Area.class);
-			connection.close();
 			return area.get(0);
 		} catch (Exception e) {
 			if((e+"").equalsIgnoreCase("java.lang.IndexOutOfBoundsException: Index: 0, Size: 0")){
@@ -45,13 +40,12 @@ public class DAOArea {
 	
 	public static boolean insertArea(String name) {
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).beginTransaction()){
+		try {
 			String query="insert into Area(name) values(:name)";
-			connection.createQuery(query)
+			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("name", name)
 					.executeUpdate();
-			connection.commit();
-			connection.close();
+			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -63,13 +57,12 @@ public class DAOArea {
 	
 	public static boolean deleteArea(long idArea) {
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).beginTransaction()){
+		try {
 			String query="delete from Area where Area.idArea = :id";
-			connection.createQuery(query)
+			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("id", idArea)
 					.executeUpdate();
-			connection.commit();
-			connection.close();
+			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -81,14 +74,13 @@ public class DAOArea {
 
 	public static boolean updateArea(Area area) {
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).beginTransaction()){
+		try {
 			String query="update Area set name = :name where Area.idArea = :id";
-			connection.createQuery(query)
+			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("id",  area.getIdArea())
 					.addParameter("name",area.getName())
 					.executeUpdate();
-			connection.commit();
-			connection.close();
+			ConexionSingleton.getInstance().commit();
 			return true;
 			
 		} catch (Exception e) {

@@ -1,20 +1,16 @@
 package dao;
 
 import java.util.List;
-
-import org.sql2o.Connection;
-import org.sql2o.Sql2o;
-
-import conexion.ConnectionData;
+import conexion.ConexionSingleton;
 import vo.City;
 
 public class DAOCity {
 	
 	public static List<City> getCities(){
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).open()){
+		try {
 			String query="select * from City";
-			List<City> ciudades = connection.createQuery(query)
+			List<City> ciudades = ConexionSingleton.getInstance().createQuery(query)
 			        		 .executeAndFetch(City.class);
 			return ciudades;
 		} catch (Exception e) {
@@ -25,9 +21,9 @@ public class DAOCity {
 	
 	public static City getCityById(long cname) {
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).open()){
+		try {
 			String query="select * from City where idCity = :cname";
-			List<City> city = connection.createQuery(query)
+			List<City> city = ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("cname", cname)
 			        .executeAndFetch(City.class);
 			return city.get(0);
@@ -45,13 +41,12 @@ public class DAOCity {
 	public static boolean insertCity(City city) {
 		initDriver();
 		
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).beginTransaction()){
+		try {
 			String query="insert into City(name, idCountry) values(:name, :idc)";
-			connection.createQuery(query)
+			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("name",city.getName())
 					.addParameter("idc", city.getIdCountry())
 					.executeUpdate();
-			connection.commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -63,12 +58,11 @@ public class DAOCity {
 	
 	public static boolean deleteCity(long idCity) {
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).beginTransaction()){
+		try {
 			String query="delete from City where City.idCity = :id";
-			connection.createQuery(query)
+			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("id", idCity)
 					.executeUpdate();
-			connection.commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -80,14 +74,13 @@ public class DAOCity {
 
 	public static boolean updateCity(City city) {
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).beginTransaction()){
+		try {
 			String query="update City set name = :name, idCountry = :idc where City.idCity = :id";
-			connection.createQuery(query)
+			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("name",city.getName())
 					.addParameter("idc", city.getIdCountry())
 					.addParameter("id",  city.getIdCity())
 					.executeUpdate();
-			connection.commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();

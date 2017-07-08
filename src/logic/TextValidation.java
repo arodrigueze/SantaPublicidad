@@ -11,5 +11,13 @@ public class TextValidation {
 		palabra = palabra.replace("ú", "u");
 		return palabra;
 	}
+	
+	public static String convertirParaPruebas(String palabra){		
+		palabra = palabra.trim();
+		palabra = cambiarTildes(palabra);
+		palabra.toLowerCase();
+		palabra = palabra.replaceAll("\\s+","");
+		return palabra;
+	}
 
 }

@@ -1,11 +1,7 @@
 package dao;
 
 import java.util.List;
-
-import org.sql2o.Connection;
-import org.sql2o.Sql2o;
-
-import conexion.ConnectionData;
+import conexion.ConexionSingleton;
 import vo.Roll;
 import vo.UserRoll;
 
@@ -13,9 +9,9 @@ public class DAORoll {
 		
 	public static List<Roll> getRoll(){
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).open()){
+		try {
 			String query="select * from Role";
-			List<Roll> role = connection.createQuery(query)
+			List<Roll> role = ConexionSingleton.getInstance().createQuery(query)
 			        		 .executeAndFetch(Roll.class);
 			return role;
 		} catch (Exception e) {
@@ -26,7 +22,7 @@ public class DAORoll {
 	
 	public static Roll getRoleByIdUser(long iduser) {
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).open()){
+		try {
 			long idrole=-1;
 			List<UserRoll> userroles = DAOUserRoll.getUserRoll();
 			for (int i = 0; i < userroles.size(); i++) {
@@ -40,7 +36,7 @@ public class DAORoll {
 			}
 			
 			String query="select * from Role where idRole = :idroll";
-			List<Roll> role = connection.createQuery(query)
+			List<Roll> role = ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("idroll", idrole)
 			        .executeAndFetch(Roll.class);
 			return role.get(0);

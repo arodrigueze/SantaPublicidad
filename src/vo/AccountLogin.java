@@ -5,13 +5,15 @@ public class AccountLogin{
 	private String loginCode;
 	private String ip;
 	private String roll;
+	private User user;
 	
-	public AccountLogin(String username, String loginCode, String ip, String roll) {
+	public AccountLogin(String username, String loginCode, String ip, String roll, User user) {
 		super();
 		this.username = username;
 		this.loginCode = loginCode;
 		this.ip = ip;
 		this.roll = roll;
+		this.user = user;
 	}
 
 	public String getRoll() {
@@ -47,10 +49,19 @@ public class AccountLogin{
 		this.ip = ip;
 	}
 
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 	@Override
 	public String toString() {
 		return "AccountLogin [username=" + username + ", loginCode=" + loginCode + ", ip=" + ip + ", roll=" + roll
-				+ "]";
+				+ ", user=" + user + "]";
 	}
+
 	
 }

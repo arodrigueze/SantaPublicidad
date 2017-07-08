@@ -2,7 +2,6 @@ package logic;
 
 import java.util.List;
 import org.json.JSONObject;
-
 import dao.DAOAddress;
 import dao.DAOCity;
 import vo.Address;
@@ -11,8 +10,13 @@ import vo.City;
 
 public class LogicCity {
 
+	private static List<City> cities = DAOCity.getCities();
+	private static List<Address> direcciones = DAOAddress.getAddress();
+	
 	public static JSONObject getCitiesJSON() {
-			List<City> cities = DAOCity.getCities();
+			if(cities == null){
+				cities = DAOCity.getCities();
+			}	
 			JSONObject obj = new JSONObject();
 			if (cities != null) {
 				obj.putOnce("cities", cities);
@@ -29,15 +33,20 @@ public class LogicCity {
 
 	public static JSONObject createCity(City city) {
 		JSONObject obj = new JSONObject();
-		List<City> cities = DAOCity.getCities();
+		if(cities == null){
+			cities = DAOCity.getCities();
+		}
 		if (cities==null) {
 			obj.put("validate", "true");
 			obj.put("insert", "false");
 			obj.put("status", "error en base de datos.");
 			return obj;
 		}
+		String a,b;
 		for (int i = 0; i < cities.size(); i++) {
-			if(TextValidation.cambiarTildes(cities.get(i).getName()).equals(TextValidation.cambiarTildes(city.getName()))&&cities.get(i).getIdCountry()==city.getIdCountry()){
+			a = TextValidation.convertirParaPruebas(cities.get(i).getName());
+			b = TextValidation.convertirParaPruebas(city.getName());
+			if(a.equals(b)&&cities.get(i).getIdCountry()==city.getIdCountry()){
 				obj.put("validate", "true");
 				obj.put("insert", "false");
 				obj.put("status", "La ciudad se encontraba previamente en la base de datos.");
@@ -47,21 +56,30 @@ public class LogicCity {
 			}
 		}
 		if (DAOCity.insertCity(city)) {
+			cities.clear();
+			cities = DAOCity.getCities();
 			obj.put("validate", "true");
 			obj.put("insert", "true");
-			cities = DAOCity.getCities();
 			if (cities==null) {
 				obj.put("validate", "true");
 				obj.put("insert", "true");
 				obj.put("status", "Error el obtener el id de ciudad.");
 				return obj;
 			}
-			if (TextValidation.cambiarTildes(cities.get(cities.size()-1).getName()).equals(TextValidation.cambiarTildes(city.getName()))) {
-				obj.put("status", "Se ha insertado correctamente la ciudad.");
-				obj.put("idCity", cities.get(cities.size()-1).getIdCity());
-				obj.put("name", cities.get(cities.size()-1).getName());
-				obj.put("idPais", cities.get(cities.size()-1).getIdCountry());
+			for (int i = 0; i < cities.size(); i++) {
+				a = TextValidation.convertirParaPruebas(cities.get(i).getName());
+				b = TextValidation.convertirParaPruebas(city.getName());
+				if(a.equals(b)&&cities.get(i).getIdCountry()==city.getIdCountry()){
+					obj.put("status", "Se ha insertado correctamente la ciudad.");
+					obj.put("idCity", cities.get(i).getIdCity());
+					obj.put("name", cities.get(i).getName());
+					obj.put("idPais", cities.get(i).getIdCountry());
+					return obj;
+				}
 			}
+			obj.put("validate", "true");
+			obj.put("insert", "true");
+			obj.put("status", "Error el obtener el id de ciudad.");
 			return obj;
 		}else{
 			obj.put("validate", "true");
@@ -74,9 +92,14 @@ public class LogicCity {
 	public static JSONObject deleteCity(String idCity) {
 		Long idcity = Long.parseLong(idCity);
 		JSONObject obj = new JSONObject();
-		List<Address> direcciones = DAOAddress.getAddress();
-		List<City>    ciudades    = DAOCity.getCities();
-		if (direcciones!=null && ciudades != null) {
+		if(cities == null){
+			cities = DAOCity.getCities();
+		}
+		if(direcciones == null){
+			direcciones = DAOAddress.getAddress();
+		}
+		
+		if (direcciones!=null && cities != null) {
 			for (int i = 0; i < direcciones.size(); i++) {
 				if (direcciones.get(i).getIdCity()==idcity) {
 					obj.put("validate", "true");
@@ -86,6 +109,8 @@ public class LogicCity {
 				}
 			}
 			if (DAOCity.deleteCity(idcity)) {
+				cities.clear();
+				cities = DAOCity.getCities();
 				obj.put("validate", "true");
 				obj.put("delete", "true");
 				obj.put("status", "Borrado de ciudad correcto.");
@@ -108,6 +133,8 @@ public class LogicCity {
 	public static JSONObject updateCity(City city) {
 		JSONObject obj = new JSONObject();
 		if (DAOCity.updateCity(city)) {
+			cities.clear();
+			cities = DAOCity.getCities();
 			obj.put("validate", "true");
 			obj.put("update", "true");
 			obj.put("status", "Actualización de la ciudad correcta.");

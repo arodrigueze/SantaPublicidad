@@ -1,20 +1,16 @@
 package dao;
 
 import java.util.List;
-
-import org.sql2o.Connection;
-import org.sql2o.Sql2o;
-
-import conexion.ConnectionData;
+import conexion.ConexionSingleton;
 import vo.Value;
 
 public class DAOValue {
 	
 	public static List<Value> getCities(){
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).open()){
+		try {
 			String query="select * from Value";
-			List<Value> ciudades = connection.createQuery(query)
+			List<Value> ciudades = ConexionSingleton.getInstance().createQuery(query)
 			        		 .executeAndFetch(Value.class);
 			return ciudades;
 		} catch (Exception e) {
@@ -25,9 +21,9 @@ public class DAOValue {
 	
 	public static Value getValueById(long cname) {
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).open()){
+		try {
 			String query="select * from Value where idValue = :cname";
-			List<Value> valueV = connection.createQuery(query)
+			List<Value> valueV = ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("cname", cname)
 			        .executeAndFetch(Value.class);
 			return valueV.get(0);
@@ -45,13 +41,13 @@ public class DAOValue {
 	public static boolean insertValue(Value valueV) {
 		initDriver();
 		
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).beginTransaction()){
+		try {
 			String query="insert into Value(name, value) values(:name, :value)";
-			connection.createQuery(query)
+			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("name",valueV.getName())
 					.addParameter("value", valueV.getValue())
 					.executeUpdate();
-			connection.commit();
+			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -63,12 +59,12 @@ public class DAOValue {
 	
 	public static boolean deleteValue(long idValue) {
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).beginTransaction()){
+		try {
 			String query="delete from Value where Value.idValue = :id";
-			connection.createQuery(query)
+			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("id", idValue)
 					.executeUpdate();
-			connection.commit();
+			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -80,14 +76,14 @@ public class DAOValue {
 
 	public static boolean updateValue(Value valueV) {
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).beginTransaction()){
+		try {
 			String query="update Value set name = :name, value = :value where Value.idValue = :id";
-			connection.createQuery(query)
+			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("id",  valueV.getIdValue())
 					.addParameter("name",valueV.getName())
 					.addParameter("value", valueV.getValue())
 					.executeUpdate();
-			connection.commit();
+			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -2,6 +2,8 @@ package logic;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
+
 import org.json.JSONObject;
 import dao.DAORoll;
 import dao.DAOUser;
@@ -60,7 +62,7 @@ public class LogicLoginAuthent {
 			}
 			obj.put("roll", roll);
 			loginAccounts.put(user.getUserName().toLowerCase(), 
-					new AccountLogin(user.getUserName(), obj.getString("logincode"), ip,roll));
+					new AccountLogin(user.getUserName(), obj.getString("logincode"), ip,roll,user));
 			attempts.remove(ip);
 			return obj;
 		}else{
@@ -77,6 +79,7 @@ public class LogicLoginAuthent {
 	}
 		
 	public static JSONObject valLogin(String ip, JSONObject account){
+		System.out.println("Sesion para : "+loginAccounts.size()+" usuarios logueados");
 		String username = account.getString("username").toLowerCase();
 		String logincode = account.getString("logincode");
 		System.out.print("\tReceived -> User: '"+username+"', loginCode: **** ");
@@ -90,23 +93,11 @@ public class LogicLoginAuthent {
 			System.out.println(acc.getUsername()+" "+username);
 			System.out.println(acc.getIp()+" "+ip);
 			if(username.equals(acc.getUsername().toLowerCase()) && logincode.equals(acc.getLoginCode()) && ip.equals(acc.getIp())){
-				User usuario = DAOUser.getUserByUsername(username);
-				Roll roll = DAORoll.getRoleByIdUser(usuario.getIdUser());
 				obj.put("roll", acc.getRoll());
-				if (usuario!=null && roll!=null) {
-					if (!acc.getRoll().toLowerCase().equals(roll.getName())) {
-						loginAccounts.get(username).setRoll(roll.getName());
-						obj.remove("roll");
-						obj.put("roll", loginAccounts.get(username).getRoll());
-					}
-					if (!usuario.isActive()) {
+					if (!acc.getUser().isActive()) {
 						obj.put("status", "inactive");
 						return logOut(ip, account);
 					}
-				}else{
-					obj.put("status", "Error de validación");
-					return obj;
-				}
 				obj.remove("validate");
 				obj.put("validate", "true");
 				obj.put("status", "active");

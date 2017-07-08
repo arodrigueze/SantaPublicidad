@@ -1,20 +1,16 @@
 package dao;
 
 import java.util.List;
-
-import org.sql2o.Connection;
-import org.sql2o.Sql2o;
-
-import conexion.ConnectionData;
+import conexion.ConexionSingleton;
 import vo.Budget;
 
 public class DAOBudget {
 	
 	public static List<Budget> getBudget(){
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).open()){
+		try {
 			String query="select * from Budget";
-			List<Budget> budget = connection.createQuery(query)
+			List<Budget> budget = ConexionSingleton.getInstance().createQuery(query)
 			        		 .executeAndFetch(Budget.class);
 			return budget;
 		} catch (Exception e) {
@@ -25,9 +21,9 @@ public class DAOBudget {
 	
 	public static Budget getBudgetById(long idBudget) {
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).open()){
+		try {
 			String query="select * from Budget where idBudget = :id";
-			List<Budget> budget = connection.createQuery(query)
+			List<Budget> budget = ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("id", idBudget)
 			        .executeAndFetch(Budget.class);
 			return budget.get(0);
@@ -45,9 +41,9 @@ public class DAOBudget {
 	public static boolean insertBudget(Budget budget) {
 		initDriver();
 		
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).beginTransaction()){
+		try {
 			String query="insert into Budget(observations, date, commercialTerms, bruteTotal, IVA, months, activityTotal, idProject) values(:observations, :date, :commercialTerms, :bruteTotal, :IVA, :months, :activityTotal, :idProject)";
-			connection.createQuery(query)
+			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("observations",budget.getObservations())
 					.addParameter("date", budget.getDate())
 					.addParameter("commercialTerms", budget.getCommercialTerms())
@@ -57,7 +53,7 @@ public class DAOBudget {
 					.addParameter("activityTotal", budget.getActivityTotal())
 					.addParameter("idProject", budget.getIdProject())
 					.executeUpdate();
-			connection.commit();
+			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -69,12 +65,12 @@ public class DAOBudget {
 	
 	public static boolean deleteBudget(long idBudget) {
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).beginTransaction()){
+		try {
 			String query="delete from Budget where Budget.idBudget = :id";
-			connection.createQuery(query)
+			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("id", idBudget)
 					.executeUpdate();
-			connection.commit();
+			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -86,9 +82,9 @@ public class DAOBudget {
 
 	public static boolean updateBudget(Budget budget) {
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).beginTransaction()){
+		try {
 			String query="update Budget set observations = :observations, date = :date, commercialTerms = :commercialTerms, bruteTotal = :bruteTotal, IVA = :IVA, months = :months, activityTotal = :activityTotal, idProject = :idProject  where Budget.idBudget = :id";
-			connection.createQuery(query)
+			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("id",  budget.getIdBudget())
 					.addParameter("observations",budget.getObservations())
 					.addParameter("date", budget.getDate())
@@ -99,7 +95,7 @@ public class DAOBudget {
 					.addParameter("activityTotal", budget.getActivityTotal())
 					.addParameter("idProject", budget.getIdProject())
 					.executeUpdate();
-			connection.commit();
+			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();

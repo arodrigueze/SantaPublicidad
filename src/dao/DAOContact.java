@@ -1,20 +1,16 @@
 package dao;
 
 import java.util.List;
-
-import org.sql2o.Connection;
-import org.sql2o.Sql2o;
-
-import conexion.ConnectionData;
+import conexion.ConexionSingleton;
 import vo.Contact;
 
 public class DAOContact {
 
 	public static List<Contact> getContact(){
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).open()){
+		try {
 			String query="select * from Contact";
-			List<Contact> contact = connection.createQuery(query)
+			List<Contact> contact = ConexionSingleton.getInstance().createQuery(query)
 			        		 .executeAndFetch(Contact.class);
 			return contact;
 		} catch (Exception e) {
@@ -25,9 +21,9 @@ public class DAOContact {
 	
 	public static Contact getContactById(long idContact) {
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).open()){
+		try {
 			String query="select * from Contact where idContact = :id";
-			List<Contact> contact = connection.createQuery(query)
+			List<Contact> contact = ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("id", idContact)
 			        .executeAndFetch(Contact.class);
 			return contact.get(0);
@@ -45,26 +41,26 @@ public class DAOContact {
 	public static boolean insertContact(Contact contact) {
 		initDriver();
 		
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).beginTransaction()){
+		try {
 			if (contact.getIdProvider()==0) {
 				String query="insert into Contact(name,email,phoneNumber,idClient) values(:name, :email, :phonenumber, :idclient)";
-				connection.createQuery(query)
+				ConexionSingleton.getInstance().createQuery(query)
 						.addParameter("name",contact.getName())
 						.addParameter("email", contact.getEmail())
 						.addParameter("phonenumber", contact.getPhoneNumber())
 						.addParameter("idclient", contact.getIdClient())
 						.executeUpdate();
-				connection.commit();
+				ConexionSingleton.getInstance().commit();
 				return true;
 			}else if (contact.getIdClient()==0) {
 				String query="insert into Contact(name,email,phoneNumber,idProvider) values(:name, :email, :phonenumber, :idprovider)";
-				connection.createQuery(query)
+				ConexionSingleton.getInstance().createQuery(query)
 						.addParameter("name",contact.getName())
 						.addParameter("email", contact.getEmail())
 						.addParameter("phonenumber", contact.getPhoneNumber())
 						.addParameter("idprovider", contact.getIdProvider())
 						.executeUpdate();
-				connection.commit();
+				ConexionSingleton.getInstance().commit();
 				return true;
 			}else{
 				return false;
@@ -80,12 +76,12 @@ public class DAOContact {
 	
 	public static boolean deleteContact(long idContact) {
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).beginTransaction()){
+		try {
 			String query="delete from Contact where Contact.idContact = :id";
-			connection.createQuery(query)
+			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("id", idContact)
 					.executeUpdate();
-			connection.commit();
+			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -97,28 +93,28 @@ public class DAOContact {
 
 	public static boolean updateContact(Contact contact) {
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).beginTransaction()){
+		try {
 			if (contact.getIdClient()==0) {
 				String query="update Contact set name = :name, email = :email, phoneNumber = :phonenumber, idProvider = :idprovider where Contact.idContact = :id";
-				connection.createQuery(query)
+				ConexionSingleton.getInstance().createQuery(query)
 						.addParameter("id",  contact.getIdContact())
 						.addParameter("name",contact.getName())
 						.addParameter("email", contact.getEmail())
 						.addParameter("phonenumber", contact.getPhoneNumber())
 						.addParameter("idprovider", contact.getIdProvider())
 						.executeUpdate();
-				connection.commit();
+				ConexionSingleton.getInstance().commit();
 				return true;
 			}else if (contact.getIdProvider()==0) {
 				String query="update Contact set name = :name, email = :email, phoneNumber = :phonenumber, idClient = :idclient where Contact.idContact = :id";
-				connection.createQuery(query)
+				ConexionSingleton.getInstance().createQuery(query)
 						.addParameter("id",  contact.getIdContact())
 						.addParameter("name",contact.getName())
 						.addParameter("email", contact.getEmail())
 						.addParameter("phonenumber", contact.getPhoneNumber())
 						.addParameter("idclient", contact.getIdClient())
 						.executeUpdate();
-				connection.commit();
+				ConexionSingleton.getInstance().commit();
 				return true;
 			}else{
 				return false;

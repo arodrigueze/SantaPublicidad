@@ -1,20 +1,16 @@
 package dao;
 
 import java.util.List;
-
-import org.sql2o.Connection;
-import org.sql2o.Sql2o;
-
-import conexion.ConnectionData;
+import conexion.ConexionSingleton;
 import vo.Provider;
 
 public class DAOProvider {
 
 	public static List<Provider> getProvider(){
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).open()){
+		try {
 			String query="select * from Provider where active = 1";
-			List<Provider> provider = connection.createQuery(query)
+			List<Provider> provider = ConexionSingleton.getInstance().createQuery(query)
 			        		 .executeAndFetch(Provider.class);
 			return provider;
 		} catch (Exception e) {
@@ -25,9 +21,9 @@ public class DAOProvider {
 	
 	public static Provider getProviderById(long idProvider) {
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).open()){
+		try {
 			String query="select * from Provider where idProvider = :id";
-			List<Provider> provider = connection.createQuery(query)
+			List<Provider> provider = ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("id", idProvider)
 			        .executeAndFetch(Provider.class);
 			return provider.get(0);
@@ -45,16 +41,16 @@ public class DAOProvider {
 	public static boolean insertProvider(Provider provider) {
 		initDriver();
 		
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).beginTransaction()){
+		try {
 			String query="insert into Provider(NIT, name, description,DV, active) values(:nit, :name, :desc, :dv,:active)";
-			connection.createQuery(query)
+			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("nit",provider.getNIT())
 					.addParameter("name", provider.getName())
 					.addParameter("desc", provider.getDescription())
 					.addParameter("dv", provider.getDV())
 					.addParameter("active", provider.isActive())
 					.executeUpdate();
-			connection.commit();
+			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -66,12 +62,12 @@ public class DAOProvider {
 	
 	public static boolean deleteProvider(long idProvider) {
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).beginTransaction()){
+		try {
 			String query="delete from Provider where Provider.idProvider = :id";
-			connection.createQuery(query)
+			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("id", idProvider)
 					.executeUpdate();
-			connection.commit();
+			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -83,9 +79,9 @@ public class DAOProvider {
 
 	public static boolean updateProvider(Provider provider) {
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).beginTransaction()){
+		try {
 			String query="update Provider set NIT = :nit, name = :name, description = :desc, DV = :dv, active = :active where Provider.idProvider = :id";
-			connection.createQuery(query)
+			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("id",  provider.getIdProvider())
 					.addParameter("nit", provider.getNIT())
 					.addParameter("name", provider.getName())
@@ -93,7 +89,7 @@ public class DAOProvider {
 					.addParameter("dv", provider.getDV())
 					.addParameter("active", provider.isActive())
 					.executeUpdate();
-			connection.commit();
+			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();

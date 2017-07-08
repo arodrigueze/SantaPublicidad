@@ -1,20 +1,16 @@
 package dao;
 
 import java.util.List;
-
-import org.sql2o.Connection;
-import org.sql2o.Sql2o;
-
-import conexion.ConnectionData;
+import conexion.ConexionSingleton;
 import vo.BudgetPS;
 
 public class DAOBudgetPS {
 	
 	public static List<BudgetPS> getBudgetPS(){
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).open()){
+		try {
 			String query="select * from BudgetPS";
-			List<BudgetPS> budgetPS = connection.createQuery(query)
+			List<BudgetPS> budgetPS = ConexionSingleton.getInstance().createQuery(query)
 			        		 .executeAndFetch(BudgetPS.class);
 			return budgetPS;
 		} catch (Exception e) {
@@ -25,9 +21,9 @@ public class DAOBudgetPS {
 	
 	public static BudgetPS getBudgetPSById(long idBudgetPS) {
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).open()){
+		try {
 			String query="select * from BudgetPS where idBudgetPS = :id";
-			List<BudgetPS> budgetPS = connection.createQuery(query)
+			List<BudgetPS> budgetPS = ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("id", idBudgetPS)
 			        .executeAndFetch(BudgetPS.class);
 			return budgetPS.get(0);
@@ -45,9 +41,9 @@ public class DAOBudgetPS {
 	public static boolean insertBudgetPS(BudgetPS budgetPS) {
 		initDriver();
 		
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).beginTransaction()){
+		try {
 			String query="insert into BudgetPS(margin, amount, days, unitValue, idProductService, idBudget) values(:margin, :amount, :days, :unitValue, :idProductService, :idBudget)";
-			connection.createQuery(query)
+			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("margin",budgetPS.getMargin())
 					.addParameter("amount", budgetPS.getAmount())
 					.addParameter("days", budgetPS.getDays())
@@ -55,7 +51,7 @@ public class DAOBudgetPS {
 					.addParameter("idProductService", budgetPS.getIdProductService())
 					.addParameter("idBudget", budgetPS.getIdBudget())
 					.executeUpdate();
-			connection.commit();
+			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -67,12 +63,12 @@ public class DAOBudgetPS {
 	
 	public static boolean deleteBudgetPS(long idBudgetPS) {
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).beginTransaction()){
+		try {
 			String query="delete from BudgetPS where BudgetPS.idBudgetPS = :id";
-			connection.createQuery(query)
+			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("id", idBudgetPS)
 					.executeUpdate();
-			connection.commit();
+			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -84,9 +80,9 @@ public class DAOBudgetPS {
 
 	public static boolean updateBudgetPS(BudgetPS budgetPS) {
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).beginTransaction()){
+		try {
 			String query="update BudgetPS set margin = :margin, amount = :amount, days = :days, unitValue = :unitValue, idProductService = :idProductService, idBudget = :idBudget  where BudgetPS.idBudgetPS = :id";
-			connection.createQuery(query)
+			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("id",  budgetPS.getIdBudgetPS())
 					.addParameter("margin",budgetPS.getMargin())
 					.addParameter("amount", budgetPS.getAmount())
@@ -95,7 +91,7 @@ public class DAOBudgetPS {
 					.addParameter("idProductService", budgetPS.getIdProductService())
 					.addParameter("idBudget", budgetPS.getIdBudget())
 					.executeUpdate();
-			connection.commit();
+			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();

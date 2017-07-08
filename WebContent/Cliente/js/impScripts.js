@@ -36,6 +36,6 @@ var impScripts = {
   *limpiar la consola
   *******************************/
   clearConsole: function(){
-    console.clear();
+    //console.clear();
   }
 }

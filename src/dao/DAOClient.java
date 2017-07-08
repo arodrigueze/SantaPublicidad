@@ -1,20 +1,16 @@
 package dao;
 
 import java.util.List;
-
-import org.sql2o.Connection;
-import org.sql2o.Sql2o;
-
-import conexion.ConnectionData;
+import conexion.ConexionSingleton;
 import vo.Client;
 
 public class DAOClient {
 	
 	public static List<Client> getClient(){
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).open()){
+		try {
 			String query="select * from Client where active = 1";
-			List<Client> client = connection.createQuery(query)
+			List<Client> client = ConexionSingleton.getInstance().createQuery(query)
 			        		 .executeAndFetch(Client.class);
 			return client;
 		} catch (Exception e) {
@@ -25,9 +21,9 @@ public class DAOClient {
 	
 	public static Client getClientById(long idClient) {
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).open()){
+		try {
 			String query="select * from Client where idClient = :id";
-			List<Client> client = connection.createQuery(query)
+			List<Client> client = ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("id", idClient)
 			        .executeAndFetch(Client.class);
 			return client.get(0);
@@ -44,9 +40,9 @@ public class DAOClient {
 	
 	public static Client getClientByNIT(String nit) {
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).open()){
+		try {
 			String query="select * from Client where Client.NIT = :nit";
-			List<Client> client = connection.createQuery(query)
+			List<Client> client = ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("nit", nit)
 			        .executeAndFetch(Client.class);
 			return client.get(0);
@@ -64,16 +60,16 @@ public class DAOClient {
 	public static boolean insertClient(Client client) {
 		initDriver();
 		
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).beginTransaction()){
+		try {
 			String query="insert into Client(NIT, name, description, DV, active) values(:nit, :name, :desc, :dv, :active)";
-			connection.createQuery(query)
+			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("nit",client.getNIT())
 					.addParameter("name", client.getName())
 					.addParameter("desc", client.getDescription())
 					.addParameter("dv", client.getDV())
 					.addParameter("active", client.isActive())
 					.executeUpdate();
-			connection.commit();
+			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -85,12 +81,12 @@ public class DAOClient {
 	
 	public static boolean deleteClient(long idClient) {
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).beginTransaction()){
+		try {
 			String query="delete from Client where Client.idClient = :id";
-			connection.createQuery(query)
+			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("id", idClient)
 					.executeUpdate();
-			connection.commit();
+			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -102,9 +98,9 @@ public class DAOClient {
 
 	public static boolean updateClient(Client client) {
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).beginTransaction()){
+		try {
 			String query="update Client set NIT = :nit, name = :name, description = :desc, DV = :DV, active = :active where Client.idClient = :id";
-			connection.createQuery(query)
+			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("id",  client.getIdClient())
 					.addParameter("nit", client.getNIT())
 					.addParameter("name", client.getName())
@@ -112,7 +108,7 @@ public class DAOClient {
 					.addParameter("DV", client.getDV())
 					.addParameter("active", client.isActive())
 					.executeUpdate();
-			connection.commit();
+			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -124,13 +120,13 @@ public class DAOClient {
 	
 	public static boolean updateClientActive(String id) {
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).beginTransaction()){
+		try {
 			String query="update Client set  active = :active where Client.idClient = :id";
-			connection.createQuery(query)
+			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("id",id)
 					.addParameter("active",false)
 					.executeUpdate();
-			connection.commit();
+			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();

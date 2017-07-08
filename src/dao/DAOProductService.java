@@ -1,20 +1,16 @@
 package dao;
 
 import java.util.List;
-
-import org.sql2o.Connection;
-import org.sql2o.Sql2o;
-
-import conexion.ConnectionData;
+import conexion.ConexionSingleton;
 import vo.ProductService;
 
 public class DAOProductService {
 
 	public static List<ProductService> getProductService(){
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).open()){
+		try {
 			String query="select * from ProductService";
-			List<ProductService> productservice = connection.createQuery(query)
+			List<ProductService> productservice = ConexionSingleton.getInstance().createQuery(query)
 			        		 .executeAndFetch(ProductService.class);
 			return productservice;
 		} catch (Exception e) {
@@ -25,9 +21,9 @@ public class DAOProductService {
 	
 	public static ProductService getProductServiceById(long idProductService) {
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).open()){
+		try {
 			String query="select * from ProductService where idProductService = :id";
-			List<ProductService> productservice = connection.createQuery(query)
+			List<ProductService> productservice = ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("id", idProductService)
 			        .executeAndFetch(ProductService.class);
 			return productservice.get(0);
@@ -45,15 +41,15 @@ public class DAOProductService {
 	public static boolean insertProductService(ProductService productservice) {
 		initDriver();
 		
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).beginTransaction()){
+		try {
 			String query="insert into ProductService(name, description, price, idProvider) values(:name, :desc, :price, :idprovider)";
-			connection.createQuery(query)
+			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("name",productservice.getName())
 					.addParameter("desc", productservice.getDescription())
 					.addParameter("price", productservice.getPrice())
 					.addParameter("idprovider", productservice.getIdProvider())
 					.executeUpdate();
-			connection.commit();
+			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -65,12 +61,12 @@ public class DAOProductService {
 	
 	public static boolean deleteProductService(long idProductService) {
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).beginTransaction()){
+		try {
 			String query="delete from ProductService where ProductService.idProductService = :id";
-			connection.createQuery(query)
+			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("id", idProductService)
 					.executeUpdate();
-			connection.commit();
+			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -82,16 +78,16 @@ public class DAOProductService {
 
 	public static boolean updateProductService(ProductService productservice) {
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).beginTransaction()){
+		try {
 			String query="update ProductService set name = :name, description = :desc, price = :price, idProvider = :idprovider where ProductService.idProductService = :id";
-			connection.createQuery(query)
+			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("id",productservice.getIdProductService())
 					.addParameter("name",productservice.getName())
 					.addParameter("desc", productservice.getDescription())
 					.addParameter("price", productservice.getPrice())
 					.addParameter("idprovider", productservice.getIdProvider())
 					.executeUpdate();
-			connection.commit();
+			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();

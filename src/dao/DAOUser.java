@@ -4,6 +4,7 @@ import java.util.List;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 
+import conexion.ConexionSingleton;
 import conexion.ConnectionData;
 import vo.Roll;
 import vo.User;
@@ -27,13 +28,12 @@ public class DAOUser {
 	
 	public static User getUserByUsernameAndPassword(String username, String password) {
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).open()){
+		try {
 			String query="select * from User where userName = :username and password = :password";
-			List<User> users = connection.createQuery(query)
+			List<User> users = ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("username", username)
 					.addParameter("password", password)
 			        .executeAndFetch(User.class);
-			connection.close();
 			return users.get(0);
 		} catch (Exception e) {
 			if((e+"").equalsIgnoreCase("java.lang.IndexOutOfBoundsException: Index: 0, Size: 0")){
@@ -48,27 +48,26 @@ public class DAOUser {
 	
 	public static String getRollByUsername(String username) {
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).open()){
+		try {
 			String query="select * from User where userName = :username";
 			
-			List<User> users = connection.createQuery(query)
+			List<User> users = ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("username", username)
 			        .executeAndFetch(User.class);
 			 
 			 long iduser = users.get(0).getIdUser();
 			 
 			 String query2="select * from User_Role where idUser = :iduser";
-			 List<UserRoll> userRoll = connection.createQuery(query2)
+			 List<UserRoll> userRoll = ConexionSingleton.getInstance().createQuery(query2)
 					.addParameter("iduser", iduser)
 			        .executeAndFetch(UserRoll.class);
 			
 			 long idRoll = userRoll.get(0).getIdRole();
 			
 			 String query3="select * from Role where idRole = :id";
-			 List<Roll> roll = connection.createQuery(query3)
+			 List<Roll> roll = ConexionSingleton.getInstance().createQuery(query3)
 					.addParameter("id", idRoll)
 			        .executeAndFetch(Roll.class);
-			 connection.close();
 			 return roll.get(0).getName();
 			 
 		} catch (Exception e) {
@@ -84,12 +83,12 @@ public class DAOUser {
 	
 	public static User getUserById(String id) {
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).open()){
+		try {
 			String query="select * from User where idUser = :id";
-			List<User> users = connection.createQuery(query)
+			List<User> users = ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("id", id)
 			        .executeAndFetch(User.class);
-			connection.close();
+			ConexionSingleton.getInstance().close();
 			return users.get(0);
 		} catch (Exception e) {
 			if((e+"").equalsIgnoreCase("java.lang.IndexOutOfBoundsException: Index: 0, Size: 0")){
@@ -104,12 +103,11 @@ public class DAOUser {
 	
 	public static User getUserByUsername(String username) {
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).open()){
+		try {
 			String query="select * from User where userName = :username";
-			List<User> users = connection.createQuery(query)
+			List<User> users = ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("username", username)
 			        .executeAndFetch(User.class);
-			connection.close();
 			return users.get(0);
 		} catch (Exception e) {
 			if((e+"").equalsIgnoreCase("java.lang.IndexOutOfBoundsException: Index: 0, Size: 0")){
@@ -125,9 +123,9 @@ public class DAOUser {
 	public static boolean insertUser(User usuario) {
 		initDriver();
 		
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).beginTransaction()){
+		try {
 			String query="insert into User(document, name, userName, password, idArea, email, active) values(:document, :name, :username, :password, :idArea, :email, :active)";
-			connection.createQuery(query)
+			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("document",usuario.getDocument())
 					.addParameter("name", usuario.getName())
 					.addParameter("username", usuario.getUserName() )
@@ -136,8 +134,7 @@ public class DAOUser {
 					.addParameter("email",usuario.getEmail())
 					.addParameter("active",usuario.isActive())
 					.executeUpdate();
-			connection.commit();
-			connection.close();
+			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -149,13 +146,12 @@ public class DAOUser {
 	
 	public static boolean deleteUser(long idUsuario) {
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).beginTransaction()){
+		try{
 			String query="delete from User where User.idUser = :idUser";
-			connection.createQuery(query)
+			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("idUser", idUsuario)
 					.executeUpdate();
-			connection.commit();
-			connection.close();
+			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -167,9 +163,9 @@ public class DAOUser {
 
 	public static boolean updateUser(User usuario) {
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).beginTransaction()){
+		try {
 			String query="update User set document = :document, name = :name, userName = :username, password = :password, idArea = :idArea, email = :email, active = :active where User.idUser = :idUser";
-			connection.createQuery(query)
+			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("document",usuario.getDocument())
 					.addParameter("name", usuario.getName())
 					.addParameter("username", usuario.getUserName() )
@@ -179,8 +175,7 @@ public class DAOUser {
 					.addParameter("idUser",usuario.getIdUser())
 					.addParameter("active",true)
 					.executeUpdate();
-			connection.commit();
-			connection.close();
+			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -192,15 +187,14 @@ public class DAOUser {
 	
 	public static boolean updateUserNoGerencia(User usuario) {
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).beginTransaction()){
+		try {
 			String query="update User set password = :password, email = :email where User.idUser = :idUser";
-			connection.createQuery(query)
+			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("password", usuario.getPassword())
 					.addParameter("email",usuario.getEmail())
 					.addParameter("idUser",usuario.getIdUser())
 					.executeUpdate();
-			connection.commit();
-			connection.close();
+			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -212,14 +206,13 @@ public class DAOUser {
 	
 	public static boolean updateUserActive(String id) {
 		initDriver();
-		try (Connection connection = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).beginTransaction()){
+		try {
 			String query="update User set  active = :active where User.idUser = :idUser";
-			connection.createQuery(query)
+			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("idUser",id)
 					.addParameter("active",false)
 					.executeUpdate();
-			connection.commit();
-			connection.close();
+			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
