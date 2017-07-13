@@ -45,7 +45,6 @@ public class DAOArea {
 			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("name", name)
 					.executeUpdate();
-			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -62,7 +61,6 @@ public class DAOArea {
 			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("id", idArea)
 					.executeUpdate();
-			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -80,7 +78,6 @@ public class DAOArea {
 					.addParameter("id",  area.getIdArea())
 					.addParameter("name",area.getName())
 					.executeUpdate();
-			ConexionSingleton.getInstance().commit();
 			return true;
 			
 		} catch (Exception e) {

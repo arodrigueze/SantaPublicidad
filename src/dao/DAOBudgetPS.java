@@ -51,7 +51,6 @@ public class DAOBudgetPS {
 					.addParameter("idProductService", budgetPS.getIdProductService())
 					.addParameter("idBudget", budgetPS.getIdBudget())
 					.executeUpdate();
-			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -68,7 +67,6 @@ public class DAOBudgetPS {
 			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("id", idBudgetPS)
 					.executeUpdate();
-			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -91,7 +89,6 @@ public class DAOBudgetPS {
 					.addParameter("idProductService", budgetPS.getIdProductService())
 					.addParameter("idBudget", budgetPS.getIdBudget())
 					.executeUpdate();
-			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();

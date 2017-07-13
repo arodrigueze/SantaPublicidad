@@ -10,7 +10,7 @@ var impScripts = {
   /*********************************
   *indica si se empezo a importar
   *********************************/
-  starImport:false,
+  starImport:true,
   /*********************************
   *DocumentURL: documento a importar
   *********************************/

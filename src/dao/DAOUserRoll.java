@@ -28,7 +28,6 @@ public class DAOUserRoll {
 					.addParameter("idUser",idUser)
 					.addParameter("idRol", rol)
 					.executeUpdate();
-			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -45,7 +44,6 @@ public class DAOUserRoll {
 			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("idUser", idUsuario)
 					.executeUpdate();
-			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -63,7 +61,6 @@ public class DAOUserRoll {
 					.addParameter("idRol", userrol.getIdRole())
 					.addParameter("idUser", userrol.getIdUser())
 					.executeUpdate();
-			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -69,7 +69,6 @@ public class DAOClient {
 					.addParameter("dv", client.getDV())
 					.addParameter("active", client.isActive())
 					.executeUpdate();
-			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -86,7 +85,6 @@ public class DAOClient {
 			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("id", idClient)
 					.executeUpdate();
-			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -108,7 +106,6 @@ public class DAOClient {
 					.addParameter("DV", client.getDV())
 					.addParameter("active", client.isActive())
 					.executeUpdate();
-			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -126,7 +123,6 @@ public class DAOClient {
 					.addParameter("id",id)
 					.addParameter("active",false)
 					.executeUpdate();
-			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();

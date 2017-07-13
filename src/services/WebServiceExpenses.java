@@ -33,7 +33,7 @@ public class WebServiceExpenses {
 	          ) {
 		System.out.println(new Date()+":\n\tRemote Address: "+request.getRemoteAddr()+", Local Address: "+request.getLocalAddr());
 		System.out.println("\tAttempt to validate log in from : "+referer);
-		System.out.println("\tEn listar expenses\nEN LISTAR GASTOS");
+		System.out.println("\tEn listar expenses\nEN LISTAR");
 		int verifyAccess = ConnectionData.verifyAccess(referer);
 		if( verifyAccess != -1){
 			System.out.print(", Access granted");  

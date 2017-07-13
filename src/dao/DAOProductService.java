@@ -49,7 +49,6 @@ public class DAOProductService {
 					.addParameter("price", productservice.getPrice())
 					.addParameter("idprovider", productservice.getIdProvider())
 					.executeUpdate();
-			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -66,7 +65,6 @@ public class DAOProductService {
 			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("id", idProductService)
 					.executeUpdate();
-			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -87,7 +85,6 @@ public class DAOProductService {
 					.addParameter("price", productservice.getPrice())
 					.addParameter("idprovider", productservice.getIdProvider())
 					.executeUpdate();
-			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -48,7 +48,6 @@ public class DAOAddress {
 						.addParameter("idcy", address.getIdCity())
 						.addParameter("idct", address.getIdClient())
 						.executeUpdate();
-				ConexionSingleton.getInstance().commit();
 				return true;
 			}else if(address.getIdClient()==0){
 				String query="insert into Address(address, idProvider, idCity) values(:address, :idP, :idcy)";
@@ -57,7 +56,6 @@ public class DAOAddress {
 						.addParameter("idP", address.getIdProvider())
 						.addParameter("idcy", address.getIdCity())
 						.executeUpdate();
-				ConexionSingleton.getInstance().commit();
 				return true;
 			}else{
 				System.out.println("Error debido a que los id de provedor o cliente son erroneos");
@@ -78,7 +76,6 @@ public class DAOAddress {
 			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("id", idAddress)
 					.executeUpdate();
-			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -99,7 +96,6 @@ public class DAOAddress {
 						.addParameter("idcy", address.getIdCity())
 						.addParameter("idc", address.getIdClient())
 						.executeUpdate();
-				ConexionSingleton.getInstance().commit();
 				return true;
 			}else  if(address.getIdClient()==0){
 				String query="update Address set address = :address, idProvider = :idp, idCity = :idcy where Address.idAddress = :id";
@@ -109,7 +105,6 @@ public class DAOAddress {
 						.addParameter("idp", address.getIdProvider())
 						.addParameter("idcy", address.getIdCity())
 						.executeUpdate();
-				ConexionSingleton.getInstance().commit();
 				return true;
 			}else{
 				return false;

@@ -134,7 +134,7 @@ public class LogicCountry {
 		for (int i = 0; i < countries.size(); i++) {
 			a = TextValidation.convertirParaPruebas(countries.get(i).getName());
 			b = TextValidation.convertirParaPruebas(country.getName());
-			if(a.equals(b)){
+			if(a.equals(b)&&country.getIdCountry()!=countries.get(i).getIdCountry()){
 				obj.put("validate", "true");
 				obj.put("insert", "false");
 				obj.put("status", "El pais se encontraba previamente en la base de datos.");

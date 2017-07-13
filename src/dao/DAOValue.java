@@ -47,7 +47,6 @@ public class DAOValue {
 					.addParameter("name",valueV.getName())
 					.addParameter("value", valueV.getValue())
 					.executeUpdate();
-			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -64,7 +63,6 @@ public class DAOValue {
 			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("id", idValue)
 					.executeUpdate();
-			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -83,7 +81,6 @@ public class DAOValue {
 					.addParameter("name",valueV.getName())
 					.addParameter("value", valueV.getValue())
 					.executeUpdate();
-			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();

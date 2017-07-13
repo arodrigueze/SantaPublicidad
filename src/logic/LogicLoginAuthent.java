@@ -2,13 +2,10 @@ package logic;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
-
 import org.json.JSONObject;
 import dao.DAORoll;
 import dao.DAOUser;
 import vo.AccountLogin;
-import vo.Roll;
 import vo.TimeControlAccountLogin;
 import vo.User;
 

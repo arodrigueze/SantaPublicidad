@@ -124,7 +124,6 @@ function newDinamicOWS(msNewObj){
 		*service: nombre del servicio
 		**************************************/
 		consumeService: function (link, dataAndAccount) {
-			validateAccount();
 			var dataReturn = {'success': 'false', 'status':'', 'data':[]};
 			$.ajax({
 				url: link,
@@ -133,7 +132,7 @@ function newDinamicOWS(msNewObj){
 				async : false,
 				dataTipe: 'JSON',
 				success: function (data) {
-					//console.log(JSON.stringify(data));
+					console.log(JSON.stringify(data));
 					dataReturn.data = data;
 			       	dataReturn.success = 'true';
 			      	dataReturn.status = "success";
@@ -144,7 +143,6 @@ function newDinamicOWS(msNewObj){
 					dataReturn.status = "error de conexion";
 				}
 			});
-			validateAccount();
 			return dataReturn;
 		},
 		/**************************************
@@ -173,7 +171,7 @@ function newDinamicOWS(msNewObj){
 			$('#'+idMessage).html('<div class="alert alert-'+typeAlert+'" role="alert">'+message+'</div>');
 			if(typeSreenup == "modal"){ $('#'+idFocus).scrollTop(0);
 			}else{ $('htmls,body').animate({ scrollTop: $("#"+idFocus).offset().top }, 500);}
-			if(temporal){setTimeout(function() { $('#'+idMessage).html(""); },10000);}
+			if(temporal){setTimeout(function() { $('#'+idMessage).html(""); },5000);}
 		}
 	}
 };

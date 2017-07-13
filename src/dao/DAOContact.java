@@ -50,7 +50,6 @@ public class DAOContact {
 						.addParameter("phonenumber", contact.getPhoneNumber())
 						.addParameter("idclient", contact.getIdClient())
 						.executeUpdate();
-				ConexionSingleton.getInstance().commit();
 				return true;
 			}else if (contact.getIdClient()==0) {
 				String query="insert into Contact(name,email,phoneNumber,idProvider) values(:name, :email, :phonenumber, :idprovider)";
@@ -60,7 +59,6 @@ public class DAOContact {
 						.addParameter("phonenumber", contact.getPhoneNumber())
 						.addParameter("idprovider", contact.getIdProvider())
 						.executeUpdate();
-				ConexionSingleton.getInstance().commit();
 				return true;
 			}else{
 				return false;
@@ -81,7 +79,6 @@ public class DAOContact {
 			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("id", idContact)
 					.executeUpdate();
-			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -103,7 +100,6 @@ public class DAOContact {
 						.addParameter("phonenumber", contact.getPhoneNumber())
 						.addParameter("idprovider", contact.getIdProvider())
 						.executeUpdate();
-				ConexionSingleton.getInstance().commit();
 				return true;
 			}else if (contact.getIdProvider()==0) {
 				String query="update Contact set name = :name, email = :email, phoneNumber = :phonenumber, idClient = :idclient where Contact.idContact = :id";
@@ -114,7 +110,6 @@ public class DAOContact {
 						.addParameter("phonenumber", contact.getPhoneNumber())
 						.addParameter("idclient", contact.getIdClient())
 						.executeUpdate();
-				ConexionSingleton.getInstance().commit();
 				return true;
 			}else{
 				return false;

@@ -53,7 +53,6 @@ public class DAOBudget {
 					.addParameter("activityTotal", budget.getActivityTotal())
 					.addParameter("idProject", budget.getIdProject())
 					.executeUpdate();
-			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -70,7 +69,6 @@ public class DAOBudget {
 			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("id", idBudget)
 					.executeUpdate();
-			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -95,7 +93,6 @@ public class DAOBudget {
 					.addParameter("activityTotal", budget.getActivityTotal())
 					.addParameter("idProject", budget.getIdProject())
 					.executeUpdate();
-			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -49,7 +49,6 @@ public class DAOExpenses {
 					.addParameter("value", expenses.getValue())
 					.addParameter("idBudgetPS", expenses.getIdBudgetPS())
 					.executeUpdate();
-			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -66,7 +65,6 @@ public class DAOExpenses {
 			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("id", idExpenses)
 					.executeUpdate();
-			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -87,7 +85,6 @@ public class DAOExpenses {
 					.addParameter("value", expenses.getValue())
 					.addParameter("idBudgetPS", expenses.getIdBudgetPS())
 					.executeUpdate();
-			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();

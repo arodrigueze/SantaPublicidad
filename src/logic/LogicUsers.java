@@ -192,6 +192,23 @@ public class LogicUsers {
 				obj.put("delete", "false");
 				obj.put("status", "Error en el borrado del usuario");
 			}
+		}else{
+			if (DAOUserRoll.deleteUserRoll(Long.parseLong(idUser))&&usuario!=null) {
+				if (DAOUser.deleteUser(Long.parseLong(idUser))) {
+					obj.put("validate", "true");
+					obj.put("delete", "true");
+					obj.put("usernameDeleted", usuario.getUserName());
+					obj.put("status", "Usuario Borrado correctamente");
+				}else{
+					obj.put("validate", "true");
+					obj.put("delete", "false");
+					obj.put("status", "Error en el borrado del roll del usuario");
+				}
+			}else{
+				obj.put("validate", "true");
+				obj.put("delete", "false");
+				obj.put("status", "Error en el borrado del usuario");
+			}
 		}
 		return obj;
 	}

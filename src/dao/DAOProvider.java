@@ -50,7 +50,6 @@ public class DAOProvider {
 					.addParameter("dv", provider.getDV())
 					.addParameter("active", provider.isActive())
 					.executeUpdate();
-			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -67,7 +66,6 @@ public class DAOProvider {
 			ConexionSingleton.getInstance().createQuery(query)
 					.addParameter("id", idProvider)
 					.executeUpdate();
-			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -89,7 +87,6 @@ public class DAOProvider {
 					.addParameter("dv", provider.getDV())
 					.addParameter("active", provider.isActive())
 					.executeUpdate();
-			ConexionSingleton.getInstance().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
