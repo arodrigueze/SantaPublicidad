@@ -106,7 +106,8 @@ function loadUserInForm (user) {
 	$('#usernameEdit').val(user.username);
 	$('#passEdit').val("");
 	$('#emailEdit').val(user.email);
-	$('#areaEdit').val("");
+	$("#areaListEdit option").filter(function() {return $(this).text() ==''+user.area+'';}).prop("selected", true);
+	$("#rollListEdit option").filter(function() {return $(this).text() ==''+user.roll+'';}).prop("selected", true);
 }
 
 function loadAreas() {
@@ -141,6 +142,90 @@ function loadRolles() {
 		$('#rollListEdit').html(data1);
 		$('#rollListEdit').val(idRoll);
 	}
+}
+
+function approvedEditMyUser() {
+	var dataAndAccount = {
+		"username":sessionStorage.username, 
+		"logincode":sessionStorage.logincode,
+		"idUser":$('#idUserEdit').val(),
+		"document":$('#documentEdit').val(),
+		"name":changeNameFirstUpperCase($('#nameEdit').val()),
+		"usernameObj":$('#usernameEdit').val(),
+		"password":calcMD5($('#passEdit').val()),
+		"idarea":$('#areaListEdit').val(),
+		"email":$('#emailEdit').val(),
+		"idRol":$('#rollListEdit').val()
+	};
+
+	var area = $('#area').val();
+	var password = $('#pass').val()
+	var user = newDinamicOWS(false);
+	
+	if(notBlakSpaceValidation(dataAndAccount.idUser) == false){
+		user.showMessage('msMyUser', 'nameEmployed', "Error en el id de usuario", 'warning', 'default', true);
+		return;
+	}
+
+	if(documentValidation(dataAndAccount.document) == false){
+		user.showMessage('msMyUser', 'nameEmployed', "El documento ingresado no es valido", 'warning', 'default', true);
+		return;
+	}
+	
+	if(notBlakSpaceValidation(dataAndAccount.name) == false){
+		user.showMessage('msMyUser', 'nameEmployed', "Ingrese un nombre", 'warning', 'default', true);
+		return;
+	}
+
+	if(notBlakSpaceValidation(dataAndAccount.usernameObj) == false){
+		user.showMessage('msMyUser', 'nameEmployed', "Ingrese un nombre de usuario", 'warning', 'default', true);
+		return;
+	}
+
+	if(emailValidation(dataAndAccount.email) == false){
+		user.showMessage('msMyUser', 'nameEmployed', "El correo electronico ingresado no es valido", 'warning', 'default', true);
+		return;
+	}
+
+	if(notBlakSpaceValidation(password)){
+		if(passwordValidation(password) == false){
+			user.showMessage('msMyUser', 'nameEmployed', "La contraseña debe tener minimo 8 caracteres y maximo 20, ademas debe tener almenos una letra mayuscula, una minuscula,un numero y un caracter especial (ejemplo: Santa12*)", 'warning', 'default', true);
+			return;
+		}	
+	}
+console.log("Estoy en validaciones");	
+	if(notBlakSpaceValidation(area) && dataAndAccount.idarea == 0){
+		var idArea = createArea(area);
+		if(numberValidation(idArea, true, false) == false){
+			user.showMessage('msMyUser', 'nameEmployed', "Error creando area", 'danger', 'default', true);
+			return;
+		}else{
+			dataAndAccount.idarea = idArea;
+		}
+	}
+
+	if(dataAndAccount.idarea == 0){
+		user.showMessage('msMyUser', 'nameEmployed', "Seleccione una area", 'warning', 'default', true);
+		return;
+	}
+
+	if(dataAndAccount.idRol == 0){
+		user.showMessage('msMyUser', 'nameEmployed', "Seleccione un roll", 'warning', 'default', true);
+		return;
+	}
+
+	var data = user.set(editUserService ,dataAndAccount, '');
+	if(data.success == 'false'){
+		user.showMessage('msMyUser', 'nameEmployed', 'No se pudo editar el usuario<br><strong>Motivo: </strong>'+data.status, 'warning', 'default', true);	
+	} else{
+		$('#myModalEdit').modal('hide');
+		loadUsuarios();
+		user.showMessage('msCRUDUsuarios', 'nameEmployed', 'El usuario se edito con exito:', 'success', 'default', true);
+	}
+}
+
+function closeModal(){
+	$('#myModalEdit').modal('hide');
 }
 
 function findElement(obj, attrib, idCompare) {
