@@ -34,11 +34,8 @@ function emailValidation(email) {
 }
 
 function passwordValidation(password) {
-	console.log("En validar contraseña");
 	if(notBlakSpaceValidation(password)==false) return false;
-	console.log("validacion pasa vacio ok");
 	if(password.length < 8 || password.length > 20) return false;
-	console.log("validacion pasa longitud ok");
 	var upperCase = false;	var lowerCase = false; var charespecial = false; var number = false;
 	for (var i = 0; i < password.length; i++) {
 		var character = password.charCodeAt(i);
@@ -46,7 +43,6 @@ function passwordValidation(password) {
 		else if(character<= 90 && character >= 65) upperCase = true;
 		else if(character<= 122 && character >= 97) lowerCase = true;
 		else charespecial = true;
-		console.log("uppsercase "+ upperCase+" lowercase"+lowerCase+" charespecial"+charespecial+" number "+number);
 		if(upperCase && lowerCase && charespecial && number) return true;
 	} return false;
 }

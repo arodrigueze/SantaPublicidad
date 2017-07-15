@@ -30,9 +30,9 @@ public class WebServiceUsers {
 	          @DefaultValue("null") @QueryParam("username") String username, 
 	          @DefaultValue("null") @QueryParam("logincode") String logincode
 	          ) {
-		System.out.println(new Date()+":\n\tRemote Address: "+request.getRemoteAddr()+", Local Address: "+request.getLocalAddr());
-		System.out.println("\tAttempt to validate log in from : "+referer);
-		System.out.println("\tLISTAR USUARIOS");
+		System.out.println(new Date()+":\n\nRemote Address: "+request.getRemoteAddr()+", Local Address: "+request.getLocalAddr());
+		System.out.println("\nAttempt to validate log in from : "+referer);
+		System.out.println("\nLISTAR USUARIOS");
 		int verifyAccess = ConnectionData.verifyAccess(referer);
 		if( verifyAccess != -1){
 			System.out.print(", Access granted");  
@@ -72,9 +72,9 @@ public class WebServiceUsers {
 	          @DefaultValue("null") @QueryParam("logincode") String logincode,
 	          @DefaultValue("null") @QueryParam("username") String username
 	          ) {
-		System.out.print(new Date()+":\n\tRemote Address: "+request.getRemoteAddr()+", Local Address: "+request.getLocalAddr());
-		System.out.print("\tAttempt to validate log in from : "+referer);
-		System.out.print("\tEn INSERTAR USUARIO");
+		System.out.print(new Date()+":\n\nRemote Address: "+request.getRemoteAddr()+", Local Address: "+request.getLocalAddr());
+		System.out.print("\nAttempt to validate log in from : "+referer);
+		System.out.print("\nEn INSERTAR USUARIO");
 		int verifyAccess = ConnectionData.verifyAccess(referer);
 		if( verifyAccess != -1){
 			System.out.print(", Access granted");  
@@ -106,9 +106,9 @@ public class WebServiceUsers {
 			  @DefaultValue("null") @QueryParam("username") String username,
 	          @DefaultValue("null") @QueryParam("logincode") String logincode
 	          ) {
-		System.out.print(new Date()+":\n\tRemote Address: "+request.getRemoteAddr()+", Local Address: "+request.getLocalAddr());
-		System.out.print("\tAttempt to validate log in from : "+referer);
-		System.out.print("\tBORRAR USUARIO");
+		System.out.print(new Date()+":\n\nRemote Address: "+request.getRemoteAddr()+", Local Address: "+request.getLocalAddr());
+		System.out.print("\nAttempt to validate log in from : "+referer);
+		System.out.print("\nBORRAR USUARIO");
 		int verifyAccess = ConnectionData.verifyAccess(referer);
 		if( verifyAccess != -1){
 			System.out.print(", Access granted");  
@@ -151,9 +151,9 @@ public class WebServiceUsers {
 	          @DefaultValue("null") @QueryParam("logincode") String logincode,
 	          @DefaultValue("null") @QueryParam("username") String username
 	          ) {
-		System.out.print(new Date()+":\n\tRemote Address: "+request.getRemoteAddr()+", Local Address: "+request.getLocalAddr());
-		System.out.print("\tAttempt to validate log in from : "+referer);
-		System.out.print("\tEn EDITAR USUARIO");
+		System.out.print(new Date()+":\n\nRemote Address: "+request.getRemoteAddr()+", Local Address: "+request.getLocalAddr());
+		System.out.print("\nAttempt to validate log in from : "+referer);
+		System.out.print("\nEn EDITAR USUARIO");
 		int verifyAccess = ConnectionData.verifyAccess(referer);
 		if( verifyAccess != -1){
 			System.out.print(", Access granted");  

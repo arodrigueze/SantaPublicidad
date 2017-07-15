@@ -10,7 +10,7 @@ var impScripts = {
   /*********************************
   *indica si se empezo a importar
   *********************************/
-  starImport:true,
+  starImport:false,
   /*********************************
   *DocumentURL: documento a importar
   *********************************/
@@ -30,12 +30,12 @@ var impScripts = {
   *imprimir en consola la traza de imports
   ********************************/
   seeTrace:function(){
-    console.log(this.trace="<import framewor='impScripts.js'>\n"+this.trace+"</import>");
+    console.log(this.trace="<import framework='impScripts.js'>\n"+this.trace+"</import>");
   },
   /*******************************
   *limpiar la consola
   *******************************/
   clearConsole: function(){
-    //console.clear();
+    console.clear();
   }
 }

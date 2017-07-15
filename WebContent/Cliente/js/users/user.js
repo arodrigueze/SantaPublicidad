@@ -1,5 +1,4 @@
 $(document).ready(function () {
-	console.log("Si se han cargado los usuarios.");
 	loadUsuarios();
 	loadAreas();
 	loadRolles();
@@ -45,7 +44,11 @@ function listUsers() {
 	$('#lista').html(content);
 }
 
-function editUser(idUser){
+function createUser() {
+	$('#myModalCreate').modal('show');
+}
+
+function editUser(idUser) {
 	var user = findElement(usuarios, 'iduser', idUser);
 	loadUserInForm(user);
 	$('#myModalEdit').modal('show');
@@ -99,133 +102,199 @@ function approvedDeleteUser(idUser) {
 	}
 }
 
-function loadUserInForm (user) {
+function loadUserInForm(user) {
 	$('#idUserEdit').val(user.iduser);
 	$('#documentEdit').val(user.document);
 	$('#nameEdit').val(user.name);
 	$('#usernameEdit').val(user.username);
 	$('#passEdit').val("");
 	$('#emailEdit').val(user.email);
-	$("#areaListEdit option").filter(function() {return $(this).text() ==''+user.area+'';}).prop("selected", true);
-	$("#rollListEdit option").filter(function() {return $(this).text() ==''+user.roll+'';}).prop("selected", true);
+	$("#areaListEdit option").filter(function () { return $(this).text() == '' + user.area + ''; }).prop("selected", true);
+	$("#rollListEdit option").filter(function () { return $(this).text() == '' + user.roll + ''; }).prop("selected", true);
 }
 
+
+
 function loadAreas() {
-	var dataAndAccount = {"username":sessionStorage.username, "logincode":sessionStorage.logincode};
+	var dataAndAccount = { "username": sessionStorage.username, "logincode": sessionStorage.logincode };
 	var areas = newDinamicOWS(false);
-	var data = areas.get(areaList ,dataAndAccount, 'name', 'areas');
-	if(data.success == 'false'){
-		areas.showMessage('msCRUDUsuarios', 'nameEmployed', data.status, 'danger', 'default', true);	
-	} else{
+	var data = areas.get(areaList, dataAndAccount, 'name', 'areas');
+	if (data.success == 'false') {
+		areas.showMessage('msCRUDUsuarios', 'nameEmployed', data.status, 'danger', 'default', true);
+	} else {
 		var data1 = '<option value="0">-- Seleccione la Area --</option>';
 		var idArea = 0;
 		for (var i = 0; i < areas.dataArray.length; i++) {
-			data1 += '<option value="'+areas.dataArray[i].idArea+'">'+areas.dataArray[i].name+'</option>';
+			data1 += '<option value="' + areas.dataArray[i].idArea + '">' + areas.dataArray[i].name + '</option>';
 		}
 		$('#areaListEdit').html(data1);
-		$('#areaListEdit').val(idArea);	
+		$('#areaListEdit').val(idArea);
+		$('#areaListCreate').html(data1);
+		$('#areaListCreate').val(idArea);
 	}
 }
 
 function loadRolles() {
-	var dataAndAccount = {"username":sessionStorage.username, "logincode":sessionStorage.logincode};
+	var dataAndAccount = { "username": sessionStorage.username, "logincode": sessionStorage.logincode };
 	var rolles = newDinamicOWS(false);
-	var data = rolles.get(rollList ,dataAndAccount, 'name', 'roles');
-	if(data.success == 'false'){
-		rolles.showMessage('msCRUDUsuarios', 'nameEmployed', data.status, 'danger', 'default', true);	
-	} else{
+	var data = rolles.get(rollList, dataAndAccount, 'name', 'roles');
+	if (data.success == 'false') {
+		rolles.showMessage('msCRUDUsuarios', 'nameEmployed', data.status, 'danger', 'default', true);
+	} else {
 		var data1 = '<option value="0">-- Seleccione el roll --</option>';
 		var idRoll = 0;
 		for (var i = 0; i < rolles.dataArray.length; i++) {
-			data1 += '<option value="'+rolles.dataArray[i].idRol+'">'+rolles.dataArray[i].name+'</option>';
+			data1 += '<option value="' + rolles.dataArray[i].idRol + '">' + rolles.dataArray[i].name + '</option>';
 		};
 		$('#rollListEdit').html(data1);
 		$('#rollListEdit').val(idRoll);
+		$('#rollListCreate').html(data1);
+		$('#rollListCreate').val(idRoll);
 	}
 }
 
 function approvedEditMyUser() {
 	var dataAndAccount = {
-		"username":sessionStorage.username, 
-		"logincode":sessionStorage.logincode,
-		"idUser":$('#idUserEdit').val(),
-		"document":$('#documentEdit').val(),
-		"name":changeNameFirstUpperCase($('#nameEdit').val()),
-		"usernameObj":$('#usernameEdit').val(),
-		"password":calcMD5($('#passEdit').val()),
-		"idarea":$('#areaListEdit').val(),
-		"email":$('#emailEdit').val(),
-		"idRol":$('#rollListEdit').val()
+		"username": sessionStorage.username,
+		"logincode": sessionStorage.logincode,
+		"idUser": $('#idUserEdit').val(),
+		"document": $('#documentEdit').val(),
+		"name": changeNameFirstUpperCase($('#nameEdit').val()),
+		"usernameObj": $('#usernameEdit').val(),
+		"password": calcMD5($('#passEdit').val()),
+		"idarea": $('#areaListEdit').val(),
+		"email": $('#emailEdit').val(),
+		"idRol": $('#rollListEdit').val()
 	};
 
-	var area = $('#area').val();
-	var password = $('#pass').val()
+	var area = $('#areaListEdit').val();
+	var password = $('#passEdit').val()
 	var user = newDinamicOWS(false);
-	
-	if(notBlakSpaceValidation(dataAndAccount.idUser) == false){
+
+	if (notBlakSpaceValidation(dataAndAccount.idUser) == false) {
 		user.showMessage('msMyUser', 'nameEmployed', "Error en el id de usuario", 'warning', 'default', true);
 		return;
 	}
 
-	if(documentValidation(dataAndAccount.document) == false){
+	if (documentValidation(dataAndAccount.document) == false) {
 		user.showMessage('msMyUser', 'nameEmployed', "El documento ingresado no es valido", 'warning', 'default', true);
 		return;
 	}
-	
-	if(notBlakSpaceValidation(dataAndAccount.name) == false){
+
+	if (notBlakSpaceValidation(dataAndAccount.name) == false) {
 		user.showMessage('msMyUser', 'nameEmployed', "Ingrese un nombre", 'warning', 'default', true);
 		return;
 	}
 
-	if(notBlakSpaceValidation(dataAndAccount.usernameObj) == false){
+	if (notBlakSpaceValidation(dataAndAccount.usernameObj) == false) {
 		user.showMessage('msMyUser', 'nameEmployed', "Ingrese un nombre de usuario", 'warning', 'default', true);
 		return;
 	}
 
-	if(emailValidation(dataAndAccount.email) == false){
+	if (emailValidation(dataAndAccount.email) == false) {
 		user.showMessage('msMyUser', 'nameEmployed', "El correo electronico ingresado no es valido", 'warning', 'default', true);
 		return;
 	}
 
-	if(notBlakSpaceValidation(password)){
-		if(passwordValidation(password) == false){
+	if (notBlakSpaceValidation(password)) {
+		if (passwordValidation(password) == false) {
 			user.showMessage('msMyUser', 'nameEmployed', "La contraseña debe tener minimo 8 caracteres y maximo 20, ademas debe tener almenos una letra mayuscula, una minuscula,un numero y un caracter especial (ejemplo: Santa12*)", 'warning', 'default', true);
 			return;
-		}	
-	}
-console.log("Estoy en validaciones");	
-	if(notBlakSpaceValidation(area) && dataAndAccount.idarea == 0){
-		var idArea = createArea(area);
-		if(numberValidation(idArea, true, false) == false){
-			user.showMessage('msMyUser', 'nameEmployed', "Error creando area", 'danger', 'default', true);
-			return;
-		}else{
-			dataAndAccount.idarea = idArea;
 		}
 	}
 
-	if(dataAndAccount.idarea == 0){
-		user.showMessage('msMyUser', 'nameEmployed', "Seleccione una area", 'warning', 'default', true);
+	if (dataAndAccount.idarea == 0) {
+		user.showMessage('msMyUser', 'nameEmployed', "Seleccione una Area", 'warning', 'default', true);
 		return;
 	}
 
-	if(dataAndAccount.idRol == 0){
-		user.showMessage('msMyUser', 'nameEmployed', "Seleccione un roll", 'warning', 'default', true);
+	if (dataAndAccount.idRol == 0) {
+		user.showMessage('msMyUser', 'nameEmployed', "Seleccione un Roll", 'warning', 'default', true);
 		return;
 	}
 
-	var data = user.set(editUserService ,dataAndAccount, '');
-	if(data.success == 'false'){
-		user.showMessage('msMyUser', 'nameEmployed', 'No se pudo editar el usuario<br><strong>Motivo: </strong>'+data.status, 'warning', 'default', true);	
-	} else{
+	var data = user.set(editUserService, dataAndAccount, '');
+	if (data.success == 'false') {
+		user.showMessage('msMyUser', 'nameEmployed', 'No se pudo editar el usuario<br><strong>Motivo: </strong>' + data.status, 'warning', 'default', true);
+	} else {
 		$('#myModalEdit').modal('hide');
 		loadUsuarios();
 		user.showMessage('msCRUDUsuarios', 'nameEmployed', 'El usuario se edito con exito:', 'success', 'default', true);
 	}
 }
 
-function closeModal(){
+function approvedCreateUser() {
+	var dataAndAccount = {
+		"username": sessionStorage.username,
+		"logincode": sessionStorage.logincode,
+		"document": $('#documentCreate').val(),
+		"name": changeNameFirstUpperCase($('#nameCreate').val()),
+		"usernameObj": $('#usernameCreate').val(),
+		"password": calcMD5($('#passCreate').val()),
+		"idarea": $('#areaListCreate').val(),
+		"email": $('#emailCreate').val(),
+		"idRol": $('#rollListCreate').val()
+	};
+
+	var password = $('#passCreate').val()
+	var user = newDinamicOWS(false);
+
+	if (documentValidation(dataAndAccount.document) == false) {
+		user.showMessage('msMyUserCreate', 'nameEmployed', "El documento ingresado no es valido", 'warning', 'default', true);
+		return;
+	}
+
+	if (notBlakSpaceValidation(dataAndAccount.name) == false) {
+		user.showMessage('msMyUserCreate', 'nameEmployed', "Ingrese un nombre", 'warning', 'default', true);
+		return;
+	}
+
+	if (notBlakSpaceValidation(dataAndAccount.usernameObj) == false) {
+		user.showMessage('msMyUserCreate', 'nameEmployed', "Ingrese un nombre de usuario", 'warning', 'default', true);
+		return;
+	}
+
+	if (emailValidation(dataAndAccount.email) == false) {
+		user.showMessage('msMyUserCreate', 'nameEmployed', "El correo electronico ingresado no es valido", 'warning', 'default', true);
+		return;
+	}
+
+	if (notBlakSpaceValidation(password) == false) {
+		user.showMessage('msMyUserCreate', 'nameEmployed', "La contraseña no puede estar vacia.", 'warning', 'default', true);
+		return;
+	}
+
+	if (passwordValidation(password) == false) {
+		user.showMessage('msMyUserCreate', 'nameEmployed', "La contraseña debe tener minimo 8 caracteres y maximo 20, ademas debe tener almenos una letra mayuscula, una minuscula,un numero y un caracter especial (ejemplo: Santa12*)", 'warning', 'default', true);
+		return;
+	}
+
+	if (dataAndAccount.idarea == 0) {
+		user.showMessage('msMyUserCreate', 'nameEmployed', "Seleccione una Area", 'warning', 'default', true);
+		return;
+	}
+
+	if (dataAndAccount.idRol == 0) {
+		user.showMessage('msMyUserCreate', 'nameEmployed', "Seleccione un Roll", 'warning', 'default', true);
+		return;
+	}
+
+	var data = user.add(createUserService, dataAndAccount, '');
+	if (data.success == 'false') {
+		user.showMessage('msMyUserCreate', 'nameEmployed', 'No se pudo crear el usuario<br><strong>Motivo: </strong>' + data.status, 'warning', 'default', true);
+	} else {
+		$('#myModalCreate').modal('hide');
+		loadUsuarios();
+		user.showMessage('msCRUDUsuarios', 'nameEmployed', 'El usuario se Creo con exito:', 'success', 'default', true);
+	}
+}
+
+function closeModal() {
 	$('#myModalEdit').modal('hide');
+}
+
+function closeModalCreate() {
+	$('#myModalCreate').modal('hide');
 }
 
 function findElement(obj, attrib, idCompare) {

@@ -77,6 +77,8 @@ public class LogicUsers {
 		JSONObject obj = new JSONObject();
 		List<User> usuarios = DAOUser.getUsers();
 		String rollUsername = DAOUser.getRollByUsername(username); 
+		obj.put("insert", "false");
+		obj.put("validate", "true");
 		if (rollUsername!=null) {
 			if (!rollUsername.equals("Gerencia")) {
 				obj.put("insert", "false");
@@ -93,14 +95,14 @@ public class LogicUsers {
 		
 		if (usuarios==null) {
 			obj.put("validate", "true");
-			obj.put("create", "false");
+			obj.put("insert", "false");
 			obj.put("status", "Error conexion base de datos");
 			return obj;
 		}
 		
 		if (usuario.getPassword()==null || usuario.getPassword().equals("d41d8cd98f00b204e9800998ecf8427e")) {
 			obj.put("validate", "true");
-			obj.put("create", "false");
+			obj.put("insert", "false");
 			obj.put("status", "Password Invalido");
 			return obj;
 		}
@@ -108,7 +110,7 @@ public class LogicUsers {
 		for (int i = 0; i < usuarios.size(); i++) {
 			if (usuario.getUserName().toLowerCase().equals(usuarios.get(i).getUserName().toLowerCase()) || usuario.getDocument().toLowerCase().equals(usuarios.get(i).getDocument().toLowerCase())) {
 				obj.put("validate", "true");
-				obj.put("create", "false");
+				obj.put("insert", "false");
 				obj.put("status", "Nombre de Usuario o documento Invalido");
 				return obj;
 			} 
@@ -116,16 +118,16 @@ public class LogicUsers {
 		if (DAOUser.insertUser(usuario)) {
 			if (DAOUserRoll.insert(DAOUser.getUserByUsernameAndPassword(usuario.getUserName(), usuario.getPassword()).getIdUser(),rol)) {
 				obj.put("validate", "true");
-				obj.put("create", "true");
+				obj.put("insert", "true");
 				obj.put("status", "Usuario Insertado correctamente");
 			}else{
 				obj.put("validate", "true");
-				obj.put("create", "false");
+				obj.put("insert", "false");
 				obj.put("status", "Error en insertar el user_rol del usuario");
 			}
 		}else{
 			obj.put("validate", "true");
-			obj.put("create", "false");
+			obj.put("insert", "false");
 			obj.put("status", "Error en insertar los datos del usuario");
 		}
 		return obj;
