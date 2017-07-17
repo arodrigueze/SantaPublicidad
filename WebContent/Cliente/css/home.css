@@ -75,8 +75,8 @@ footer{
 
 #lista{
 	margin-top: 10px;
-	margin-left: 50px;
-	margin-right: 50px;
+	margin-left: 40px;
+	margin-right: 40px;
 }
 
 #form{
@@ -89,6 +89,12 @@ footer{
 	margin: auto;
 	margin-top: 50px;
 	width:500px;	
+}
+
+#myClientSee{
+	margin: auto;
+	margin-top: 10px;
+	width:450px;
 }
 
 #msfind{

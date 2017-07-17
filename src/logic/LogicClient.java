@@ -116,12 +116,12 @@ public class LogicClient {
 				obj.put("insert", "true");
 				obj.put("validate", "true");
 				obj.put("idClient", c.getIdClient());
-				obj.put("status", "Se insertÃ³ correctamente.");
+				obj.put("status", "Se insertó correctamente.");
 				return obj;
 			}else{
 				obj.put("insert", "true");
 				obj.put("validate", "true");
-				obj.put("status", "Se insertÃ³ correctamente. Error al obtener el id del cliente.");
+				obj.put("status", "Se insertó correctamente. Error al obtener el id del cliente.");
 				return obj;
 			}
 		}else{

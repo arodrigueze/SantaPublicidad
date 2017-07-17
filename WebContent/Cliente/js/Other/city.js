@@ -66,7 +66,13 @@ function listCitys() {
 }
 
 function createCity() {
-	var dataAndAccount = { "username": sessionStorage.username, "logincode": sessionStorage.logincode, "name": $('#cityCreate').val(), "idCountry": $('#countryList').val() };
+	var dataAndAccount = { 
+		"username": sessionStorage.username, 
+		"logincode": sessionStorage.logincode, 
+		"name": $('#cityCreate').val(), 
+		"idCountry": $('#countryList').val() 
+	};
+	
 	var city = newDinamicOWS(false);
 
 	if (dataAndAccount.idCountry == 0) {
@@ -125,7 +131,14 @@ function editCity(idCity) {
 }
 
 function approvedEditCity() {
-	var dataAndAccount = { "username": sessionStorage.username, "logincode": sessionStorage.logincode, "idCity": $('#idCityEdit').val(), "name": $('#cityEdit').val(), "idCountry": $('#countryListEdit').val() };
+	var dataAndAccount = {
+		"username": sessionStorage.username,
+		"logincode": sessionStorage.logincode,
+		"idCity": $('#idCityEdit').val(),
+		"name": $('#cityEdit').val(),
+		"idCountry": $('#countryListEdit').val()
+	};
+	
 	var city = newDinamicOWS(false);
 
 	if (dataAndAccount.idCountry == 0) {

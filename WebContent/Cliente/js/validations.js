@@ -5,6 +5,12 @@ function numberValidation (number, natural, decimal) {
 	return true;
 }
 
+function dvValidation(numero){
+	if(isNaN(parseInt(numero))) return false;
+	if(numero>9 || numero<0)return false;
+	else return true;
+}
+
 function changeNameFirstUpperCase(name) {
 	var str = name.split(" ");
 	var n = '';
