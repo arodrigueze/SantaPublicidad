@@ -1,10 +1,12 @@
 $(document).ready(function () {
 	loadClientes();
+	loadCities();
 	$(".filter").keyup(function () { listClients() });
 	$('.filter').focus();
 });
 
 var clientes = {};
+var ciudades = {};
 
 function loadClientes() {
 	var dataAndAccount = { "username": sessionStorage.username, "logincode": sessionStorage.logincode };
@@ -16,6 +18,18 @@ function loadClientes() {
 		clientes = users.dataArray;
 		console.log(clientes);
 		listClients();
+	}
+}
+
+function loadCities() {
+	var dataAndAccount = { "username": sessionStorage.username, "logincode": sessionStorage.logincode };
+	var city = newDinamicOWS(false);
+	var data = city.get(citysListService, dataAndAccount, 'name', 'cities');
+	if (data.success == 'false') {
+		city.showMessage('msCRUDClientes', 'nameEmployed', 'No se pudo cargar las ciudades<br><strong>Motivo: </strong>' + data.status, 'danger', 'default', true);
+	} else {
+		ciudades = city.dataArray;
+		console.log(ciudades);
 	}
 }
 
@@ -34,7 +48,7 @@ function listClients() {
 			data += '<td onclick="deleteClient(' + clientes[i].idClient + ')"><center><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></center></td>';
 			data += '<td onclick="verClient(' + clientes[i].idClient + ')"><center><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></button></center></td>';
 			data += '<td onclick="ContactClient(' + clientes[i].idClient + ')"><center><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-phone" aria-hidden="true"></span></button></center></td>';
-			data += '<td onclick="addAddressClient(' + clientes[i].idClient + ')"><center><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-globe" aria-hidden="true"></span></button></center></td>';
+			data += '<td onclick="AddressClient(' + clientes[i].idClient + ')"><center><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-globe" aria-hidden="true"></span></button></center></td>';
 			data += '</tr>';
 		}
 	};
@@ -46,6 +60,97 @@ function listClients() {
 }
 
 /**Funciones de Direcciones */
+function AddressClient(id) {
+	var cliente = findElement(clientes, 'idClient', id);
+	$('#idClientAddress').val(id);
+	$('#titleModalDirecciones').html("Direcciones de " + cliente.name);
+	crearDireccion();
+	$('#direccionesModal').modal('show');
+}
+
+function editarDireccion() {
+	var cliente = findElement(clientes, 'idClient', $('#idClientAddress').val());
+	$("#liEditarDireccion").addClass("active");
+	$("#liCrearDireccion").removeClass("active");
+	$("#liBorrarDireccion").removeClass("active");
+	var data = "";
+	data += '<form action="javascript:approvedEditAddress()">';
+	data += '<div class="form-group">';
+	data += '<h3>Editar Dirección</h3>';
+	data += '<p>Selecciona una dirección para editarla.</p>';
+	data += '<label>Direcciones</label>';
+	data += '<select class="form-control" id="addressEdit">';
+	data += '<option value="0">-- Seleccione la dirección --</option>';
+	for (var i = 0; i < cliente.direcciones.length; i++) {
+		data += '<option value="' + cliente.direcciones[i].idAddress + '" onclick="loadUpdateContact(' + cliente.direcciones[i].idAddress + ')">' + cliente.direcciones[i].direccion + '</option>';
+	};
+	data += '</select>';
+	data += '</div>';
+	data += '</form>';
+	$('#addressCrud').html(data);
+}
+
+function crearDireccion() {
+	$("#liCrearDireccion").addClass("active");
+	$("#liEditarDireccion").removeClass("active");
+	$("#liBorrarDireccion").removeClass("active");
+	var data = "";
+	data += '<form action="javascript:approvedCreateAddress()">';
+	data += '<h3>Crear Dirección</h3>';
+	data += '<div class="form-group">';
+	data += '<label for="inputForm">Dirección</label>';
+	data += '<input type="text" class="form-control" id="direccionCrear" placeholder="Dirección" required>';
+	data += '</div>';
+	data += '<div class="form-group">';
+	data += '<label>Ciudades</label>';
+	data += '<select class="form-control" id="ciudadesAddressList">';
+	data += '<option value="0">-- Seleccionela ciudad --</option>';
+	for (var i = 0; i < ciudades.length; i++) {
+		data += '<option value="' + ciudades[i].idCity + '">' + ciudades[i].name + '</option>';
+	};
+	data += '</select>';
+	data += '</div>';
+	data += '<div id="controlModal" class="btn-group btn-group-justified" role="group" aria-label="...">';
+	data += '<div class="btn-group" role="group">';
+	data += '<button type="submit" class="btn btn-primary">Crear Dirección</button>';
+	data += '</div>';
+	data += '</div>';
+	data += '</form>';
+	$('#addressCrud').html(data);
+};
+
+function approvedCreateAddress() {
+
+	var address = newDinamicOWS(false);
+
+	if ($('#ciudadesAddressList').val() == 0) {
+		address.showMessage('msCRUDAddress', 'nameEmployed', "Selecciona una ciudad.", 'warning', 'default', true);
+		return;
+	}
+
+	var dataAndAccount = {
+		"username": sessionStorage.username,
+		"logincode": sessionStorage.logincode,
+		"address": $('#direccionCrear').val(),
+		"idCity": $('#ciudadesAddressList').val(),
+		"idClient": $('#idClientAddress').val()
+	};
+
+	if (notBlakSpaceValidation(dataAndAccount.address) == false) {
+		address.showMessage('msCRUDAddress', 'nameEmployed', "Ingresa una dirección.", 'warning', 'default', true);
+		return;
+	}
+
+	var data = address.add(createAddressService, dataAndAccount, '');
+
+	if (data.success == 'false') {
+		address.showMessage('msCRUDAddress', 'nameEmployed', 'No se pudo crear la dirección<br><strong>Motivo: </strong>' + data.status, 'warning', 'default', true);
+	} else {
+		$('#direccionesModal').modal('hide');
+		loadClientes();
+		address.showMessage('msCRUDClientes', 'nameEmployed', 'La dirección se creo con éxito:', 'success', 'default', true);
+	}
+}
 
 /**Funciones de contacto*/
 function ContactClient(id) {
@@ -98,7 +203,7 @@ function editarContacto() {
 	data += '<select class="form-control" id="contactEdit">';
 	data += '<option value="0">-- Seleccione el Contacto --</option>';
 	for (var i = 0; i < cliente.contactos.length; i++) {
-		data += '<option value="' + cliente.contactos[i].idContact + '" onclick="loadUpdateContact('+ cliente.contactos[i].idContact+')">' + cliente.contactos[i].name + '</option>';
+		data += '<option value="' + cliente.contactos[i].idContact + '" onclick="loadUpdateContact(' + cliente.contactos[i].idContact + ')">' + cliente.contactos[i].name + '</option>';
 	};
 	data += '</select>';
 	data += '</div>';
@@ -132,16 +237,16 @@ function borrarContacto() {
 	data += '<form action="javascript:approvedDeleteContact()">';
 	data += '<div class="form-group">';
 	data += '<h3>Editar Contacto</h3>';
-	data += '<p>Selecciona un contacto para editarlo.</p>';
+	data += '<p>Selecciona un contacto para borrarlo.</p>';
 	data += '<label>Contactos</label>';
 	data += '<select class="form-control" id="contactDeleteList">';
 	data += '<option value="0">-- Seleccione el Contacto --</option>';
 	for (var i = 0; i < cliente.contactos.length; i++) {
-		data += '<option value="' + cliente.contactos[i].idContact + '" onclick="showDeleteContact('+ cliente.contactos[i].idContact+')">' + cliente.contactos[i].name + '</option>';
+		data += '<option value="' + cliente.contactos[i].idContact + '" onclick="showDeleteContact(' + cliente.contactos[i].idContact + ')">' + cliente.contactos[i].name + '</option>';
 	};
 	data += '</select>';
 	data += '</div>';
-	data += '<div id="showDeleteContactView"></div>';	
+	data += '<div id="showDeleteContactView"></div>';
 	data += '<div id="controlModal" class="btn-group btn-group-justified" role="group" aria-label="...">';
 	data += '<div class="btn-group" role="group">';
 	data += '<button class="btn btn-primary" type="submit">Confirmar Borrardo</button>';
@@ -151,7 +256,7 @@ function borrarContacto() {
 	$('#contactCrud').html(data);
 }
 
-function showDeleteContact(idContact){
+function showDeleteContact(idContact) {
 	var contactDelete = newDinamicOWS(false);
 	if (idContact == 0) {
 		contactDelete.showMessage('msCRUDContact', 'nameEmployed', "Selecciona un Contacto.", 'warning', 'default', true);
@@ -160,16 +265,16 @@ function showDeleteContact(idContact){
 	var cliente = findElement(clientes, 'idClient', $('#idClientContact').val());
 	var contacto = findElement(cliente.contactos, 'idContact', idContact);
 	var data = "";
-	data += '<p><strong>Nombre: </strong><span>'+contacto.name+'</span></p>';
-	data += '<p><strong>Correo: </strong><span>'+contacto.email+'</span></p>';
-	data += '<p><strong>Telefono: </strong><span>'+contacto.phoneNumber+'</span></p>';
+	data += '<p><strong>Nombre: </strong><span>' + contacto.name + '</span></p>';
+	data += '<p><strong>Correo: </strong><span>' + contacto.email + '</span></p>';
+	data += '<p><strong>Telefono: </strong><span>' + contacto.phoneNumber + '</span></p>';
 	$('#showDeleteContactView').html(data);
 }
 
-function approvedDeleteContact(){
+function approvedDeleteContact() {
 	var contactDelete = newDinamicOWS(false);
 	var idContact = $('#contactDeleteList').val();
-	if(idContact==0){
+	if (idContact == 0) {
 		contactDelete.showMessage('msCRUDContact', 'nameEmployed', 'Selecciona un contacto valido.', 'warning', 'default', true);
 		return;
 	}
@@ -236,11 +341,11 @@ function approvedEditContact() {
 
 }
 
-function loadUpdateContact(idContact){
-	if(idContact==0)return;
+function loadUpdateContact(idContact) {
+	if (idContact == 0) return;
 	var cliente = findElement(clientes, 'idClient', $('#idClientContact').val());
 	var contacto = findElement(cliente.contactos, 'idContact', idContact);
-	console.log("Datos carga form update "+contacto.name+" "+contacto.email+" "+contacto.phoneNumber);
+	console.log("Datos carga form update " + contacto.name + " " + contacto.email + " " + contacto.phoneNumber);
 	$('#nombreContactoEditar').val(contacto.name);
 	$('#emailContactoEditar').val(contacto.email);
 	$('#telefonoContactoEditar').val(contacto.phoneNumber);
