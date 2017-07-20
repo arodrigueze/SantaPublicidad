@@ -61,7 +61,7 @@
 							<div class="panel-heading">Información del cliente <span id="nameClienteSee"> </span></div>
 							<div class="panel-body">
 								<p><strong>Nit: </strong><span id="nitClienteSee"></span></p>
-								<p><strong>Nombre: </strong><span id="nameClienteSee"></span></p>
+								<p><strong>Nombre: </strong><span id="nameClienteSeee"></span></p>
 								<p><strong>Descripción: </strong><span id="descriptionClientSee"></span></p>
 								<p><strong>DV: </strong><span id="dvClienteSee"></span></p>
 								<div id="accordion" role="tablist" aria-multiselectable="true">
@@ -74,12 +74,7 @@
 										</div>
 										<div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne">
 											<div class="card-block">
-												<ul class="list-group">
-													<li class="list-group-item">Cras justo odio</li>
-													<li class="list-group-item">Dapibus ac facilisis in</li>
-													<li class="list-group-item">Morbi leo risus</li>
-													<li class="list-group-item">Porta ac consectetur ac</li>
-													<li class="list-group-item">Vestibulum at eros</li>
+												<ul class="list-group" id="listaContactosAcordeon">
 												</ul>
 											</div>
 										</div>
@@ -93,12 +88,7 @@
 										</div>
 										<div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
 											<div class="card-block">
-												<ul class="list-group">
-													<li class="list-group-item">Cras justo odio</li>
-													<li class="list-group-item">Dapibus ac facilisis in</li>
-													<li class="list-group-item">Morbi leo risus</li>
-													<li class="list-group-item">Porta ac consectetur ac</li>
-													<li class="list-group-item">Vestibulum at eros</li>
+												<ul class="list-group" id="listaDireccionesAcordeon">
 												</ul>
 											</div>
 										</div>
@@ -109,13 +99,12 @@
 					</div>
 				</div>
 			</div>
-
 			<div id="myModalDelete" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 				<div class="modal-dialog" role="document">
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-							<h4 class="modal-title">Eliminar Usuario</h4>
+							<h4 class="modal-title">Eliminar Cliente</h4>
 						</div>
 						<div id="bodyModalDelete">
 						</div>
@@ -127,52 +116,38 @@
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-							<h4 class="modal-title">Editar Usuario</h4>
+							<h4 class="modal-title">Editar Cliente</h4>
 						</div>
-						<div id="msMyUser"></div>
+						<div id="msMyClientEdit"></div>
 						<div id="bodyModalEdit">
 							<div id="myUserEdit">
-								<div id="form">
-									<div id="msMyUser"></div>
-									<form action="javascript:approvedEditMyUser()">
+								<div style="padding-left:30px; padding-right:30px; padding-bottom:30px;">
+									<form action="javascript:approvedEditClient()">
 										<div class="form-group">
-											<input type="hidden" class="form-control" id="idUserEdit" placeholder="idUser" required>
+											<input type="hidden" class="form-control" id="idClientEdit" required>
 										</div>
-										<div class="form-group" id="inputDocumentEdit">
-											<label for="inputForm">Cedula</label>
-											<input type="number" class="form-control" id="documentEdit" placeholder="Cedula" required>
+										<div class="form-group">
+											<label for="inputForm">NIT</label>
+											<input type="text" class="form-control" id="nitEdit" placeholder="NIT" required>
 										</div>
-										<div class="form-group" id="inputNameEdit">
+										<div class="form-group">
 											<label for="inputForm">Nombre</label>
 											<input type="text" class="form-control" id="nameEdit" placeholder="Nombre" required>
 										</div>
 										<div class="form-group">
-											<label for="inputForm">Correo electronico</label>
-											<input type="email" class="form-control" id="emailEdit" placeholder="Correo electronico" required>
-										</div>
-										<div class="form-group" id="inputUsernameEdit">
-											<label for="inputForm">Nombre de usuario</label>
-											<input type="text" class="form-control" id="usernameEdit" placeholder="Nombre de usuario" required>
+											<label for="inputForm">Descripción</label>
+											<input type="text" class="form-control" id="descriptionEdit" placeholder="Descripción" required>
 										</div>
 										<div class="form-group">
-											<label for="inputForm">Contraseña</label>
-											<p>(Si no desea modificar la contraseña deje el espacio en blanco)</p>
-											<input type="password" class="form-control" id="passEdit" placeholder="Contraseña">
+											<label for="inputForm">DV</label>
+											<input type="number" class="form-control" id="dvEdit" placeholder="dv" required>
 										</div>
-										<div class="form-group" id="inputAreaEdit">
-											<label for="exampleInputPassword1">Area</label>
-											<select id="areaListEdit" class="form-control"></select>
-										</div>
-										<div class="form-group" id="inputrollEdit">
-											<label for="exampleInputPassword1">Roll</label>
-											<select id="rollListEdit" class="form-control"></select>
-										</div>
-										<div id="controlModal" class="btn-group btn-group-justified" role="group" aria-label="...">
+										<div class="btn-group btn-group-justified" role="group" aria-label="...">
 											<div class="btn-group" role="group">
-												<button type="submit" class="btn btn-primary">Guardar</button>
+												<button type="submit" class="btn btn-primary">Editar</button>
 											</div>
 											<div class="btn-group" role="group">
-												<button id="cancel" type="button" class="btn btn-danger" onclick="closeModal()">Cancelar</button>
+												<button type="button" class="btn btn-danger" data-dismiss="modal"">Cancelar</button>
 											</div>
 										</div>
 									</form>

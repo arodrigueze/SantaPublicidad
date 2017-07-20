@@ -1,13 +1,18 @@
 package conexion;
 
-public class ConnectionData {
+import java.net.URI;
+import java.net.URISyntaxException;
 
+public class ConnectionData {
+/*
 	private static String dataBase = "jdbc:mysql://localhost:3306/SPDB";
-	//private static String dataBase = "jdbc:mysql://www.santapublicidad.com:3306/santa8zy_spdb";
 	private static String dataBaseUser = "root";
-	//private static String dataBaseUser = "santa8zy_appspdb";
 	private static String dataBasePass = "";
-	//private static String dataBasePass = "rC(RikRG#C$2";
+*/
+
+	private static String dataBase = "";
+	private static String dataBaseUser = "";
+	private static String dataBasePass = "";
 	
 	private static String[] urlAccess = {"http://localhost:8080","agenciasantaaplicacionempresa.herokuapp.com"};
 	
@@ -15,13 +20,19 @@ public class ConnectionData {
 	public static String[] getUrlAccess() {
 		return urlAccess;
 	}
-	public static String getDataBase() {
+	public static String getDataBase() throws URISyntaxException {
+		URI dbUri = new URI(System.getenv("CLEARDB_DATABASE_URL"));
+		dataBase = "jdbc:mysql://" + dbUri.getHost() + dbUri.getPath();
 		return dataBase;
 	}
-	public static String getDataBaseUser() {
+	public static String getDataBaseUser() throws URISyntaxException {
+		URI dbUri = new URI(System.getenv("CLEARDB_DATABASE_URL"));
+		dataBaseUser = dbUri.getUserInfo().split(":")[0];
 		return dataBaseUser;
 	}
-	public static String getDataBasePass() {
+	public static String getDataBasePass() throws URISyntaxException {
+		URI dbUri = new URI(System.getenv("CLEARDB_DATABASE_URL"));
+		dataBasePass = dbUri.getUserInfo().split(":")[1];
 		return dataBasePass;
 	}
 	public static int verifyAccess(String referer){

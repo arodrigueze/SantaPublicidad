@@ -1,5 +1,7 @@
 package conexion;
 
+import java.net.URISyntaxException;
+
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 
@@ -16,7 +18,7 @@ public class ConexionSingleton {
 		}
 	}
 
-	public static synchronized Connection getInstance() {
+	public static synchronized Connection getInstance() throws URISyntaxException {
 		if (_instance == null) {
 			_instance = new Sql2o(ConnectionData.getDataBase(),ConnectionData.getDataBaseUser(),ConnectionData.getDataBasePass()).open();
 		}

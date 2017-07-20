@@ -63,7 +63,6 @@ public class LogicClient {
 				for (int j = 0; j < contactos.size(); j++) {
 					if (clienteVista.get(i).getIdClient()==contactos.get(j).getIdClient()) {
 						clienteVista.get(i).addContactos(contactos.get(j));
-						break;
 					}
 				}
 			}
@@ -73,7 +72,6 @@ public class LogicClient {
 				for (int j = 0; j < addressVista.size(); j++) {
 					if (clienteVista.get(i).getIdClient()==addressVista.get(j).getIdClient()) {
 						clienteVista.get(i).addDirecciones(addressVista.get(j));
-						break;
 					}
 				}
 			}

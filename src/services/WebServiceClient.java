@@ -116,7 +116,7 @@ public class WebServiceClient {
 			account.put("logincode", logincode);	
 			account = LogicLoginAuthent.valLogin(request.getRemoteAddr(), account);
 			if (account.getString("validate").equals("true")) {
-				Client client = new Client(Long.parseLong(idClient), nit, username, description, Integer.parseInt(dv),true);
+				Client client = new Client(Long.parseLong(idClient), nit, name, description, Integer.parseInt(dv),true);
 				return Response.ok(LogicClient.updateClient(client).toString()).header("Access-Control-Allow-Origin", ConnectionData.getUrlAccess()[verifyAccess]).build();
 			}else{
 				System.out.print(", Error cargando Usuarios\n");

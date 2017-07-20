@@ -69,20 +69,7 @@ public class LogicAddress {
 	public static Object deleteAddress(long address) {
 		JSONObject obj = new JSONObject();
 		Address direccion = DAOAddress.getAddressById(address);
-		List<Address> direcciones = DAOAddress.getAddress();
-		if (direccion != null && direcciones != null) {
-			int cantidad = 0;
-			for (int i = 0; i < direcciones.size(); i++) {
-				if (direcciones.get(i).getIdProvider()==direccion.getIdProvider()) {
-					cantidad++;
-				}
-			}
-			if (cantidad<2) {
-				obj.put("validate", "true");
-				obj.put("delete", "false");
-				obj.put("status", "El proveedor debe tener minimo 1 dirección. No se puede borrar.");
-				return obj;
-			}
+		if (direccion != null) {
 			if (DAOAddress.deleteAddress(address)) {
 				obj.put("validate", "true");
 				obj.put("delete", "true");

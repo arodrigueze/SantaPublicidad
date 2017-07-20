@@ -16,7 +16,6 @@ function loadClientes() {
 		users.showMessage('msCRUDClientes', 'nameEmployed', 'No se pudo cargar los Clientes<br><strong>Motivo: </strong>' + data.status, 'danger', 'default', true);
 	} else {
 		clientes = users.dataArray;
-		console.log(clientes);
 		listClients();
 	}
 }
@@ -29,7 +28,6 @@ function loadCities() {
 		city.showMessage('msCRUDClientes', 'nameEmployed', 'No se pudo cargar las ciudades<br><strong>Motivo: </strong>' + data.status, 'danger', 'default', true);
 	} else {
 		ciudades = city.dataArray;
-		console.log(ciudades);
 	}
 }
 
@@ -58,6 +56,112 @@ function listClients() {
 	content += data + '</table>';
 	$('#lista').html(content);
 }
+/*Funciones de Editar cliente */
+function editClient(idClient) {
+	var cliente = findElement(clientes, 'idClient', idClient);
+	$('#idClientEdit').val(idClient);
+	$('#nitEdit').val(cliente.NIT);
+	$('#nameEdit').val(cliente.name);
+	$('#descriptionEdit').val(cliente.description);
+	$('#dvEdit').val(cliente.DV);
+	$('#myModalEdit').modal('show');
+}
+
+function approvedEditClient() {
+	var clientUpDate = newDinamicOWS(false);
+	var dataAndAccount = {
+		"username": sessionStorage.username,
+		"logincode": sessionStorage.logincode,
+		"idClient": $('#idClientEdit').val(),
+		"nit": $('#nitEdit').val(),
+		"name": $('#nameEdit').val(),
+		"description": $('#descriptionEdit').val(),
+		"DV": $('#dvEdit').val()
+	};
+
+	if (notBlakSpaceValidation(dataAndAccount.nit) == false) {
+		clientUpDate.showMessage('msMyClientEdit', 'nameEmployed', "Ingresa el nit.", 'warning', 'default', true);
+		return;
+	}
+	if (notBlakSpaceValidation(dataAndAccount.name) == false) {
+		clientUpDate.showMessage('msMyClientEdit', 'nameEmployed', "Ingresa el nombre.", 'warning', 'default', true);
+		return;
+	}
+	if (notBlakSpaceValidation(dataAndAccount.description) == false) {
+		clientUpDate.showMessage('msMyClientEdit', 'nameEmployed', "Ingresa una breve descripción.", 'warning', 'default', true);
+		return;
+	}
+	if (dvValidation(dataAndAccount.DV) == false) {
+		clientUpDate.showMessage('msMyClientEdit', 'nameEmployed', "Ingresa un DV valido.", 'warning', 'default', true);
+		return;
+	}
+	var data = clientUpDate.set(editClientService, dataAndAccount, '');
+	if (data.success == 'false') {
+		clientUpDate.showMessage('msMyClientEdit', 'nameEmployed', 'No se pudo editar el cliente.<br><strong>Motivo: </strong>' + data.status, 'warning', 'default', true);
+	} else {
+		$('#myModalEdit').modal('hide');
+		loadClientes();
+		clientUpDate.showMessage('msCRUDClientes', 'nameEmployed', 'Se editó el cliente con éxito:', 'success', 'default', true);
+	}
+}
+
+/*Funciones de Borrar cliente */
+function deleteClient(idClient) {
+	var cliente = findElement(clientes, 'idClient', idClient);
+	var data = "";
+	data += '<div class="modal-body">';
+	data += '<div id="msDeleteClient"></div>';
+	data += '<p>Está a punto de eliminar el Cliente con los siguientes datos: </p>';
+	data += '<div class="panel panel-default"><div class="panel-heading">Usuario</div>';
+	data += '<div class="panel-body">';
+	data += '<p><strong>Nit: </strong><span id="nitClienteSee">' + cliente.NIT + '</span></p>';
+	data += '<p><strong>Nombre: </strong><span id="nameClienteSeee">' + cliente.name + '</span></p>';
+	data += '<p><strong>Descripción: </strong><span id="descriptionClientSee">' + cliente.description + '</span></p>';
+	data += '<p><strong>DV: </strong><span id="dvClienteSee">' + cliente.DV + '</span></p>';
+	data += '</div></div>';
+	data += '<p>está accion es irreversible, ¿desea continuar?</p>';
+	data += '</div><div class="modal-footer">';
+	data += '<button type="button" class="btn btn-primary" onclick="approvedDeleteClient(' + idClient + ')">Continuar, Eliminar el Cliente</button>';
+	data += '<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>';
+	data += '</div>';
+	$('#bodyModalDelete').html(data);
+	$('#myModalDelete').modal('show');
+}
+
+function approvedDeleteClient(idClient) {
+	var dataAndAccount = { "username": sessionStorage.username, "logincode": sessionStorage.logincode, "idClient": idClient };
+	var client = newDinamicOWS(false);
+	var data = client.remove(deleteClientService, dataAndAccount, '');
+	if (data.success == 'false') {
+		$('#myModalDelete').modal('hide');
+		client.showMessage('msCRUDClientes', 'msCRUDUsuarios', 'No se pudo eliminar el cliente<br><strong>Motivo: </strong>' + data.status, 'warning', 'modal', true);
+	} else {
+		$('#myModalDelete').modal('hide');
+		client.showMessage('msCRUDClientes', 'nameEmployed', 'Se eliminó el cliente con éxito!', 'success', 'default', true);
+		loadClientes();
+	}
+}
+
+/*funciones ver cliente */
+function verClient(idCliente) {
+	var cliente = findElement(clientes, 'idClient', idCliente);
+	$('#nitClienteSee').text(cliente.NIT);
+	$('#nameClienteSeee').text(cliente.name);
+	$('#descriptionClientSee').text(cliente.description);
+	$('#dvClienteSee').text(cliente.DV);
+
+	var address = "";
+	var contacts = "";
+
+	for (var i = 0; i < cliente.direcciones.length; i++) {
+		address += '<li class="list-group-item">' + cliente.direcciones[i].direccion + '<br>' + cliente.direcciones[i].ciudad + '</li>';
+	};
+	for (var i = 0; i < cliente.contactos.length; i++) {
+		contacts += '<li class="list-group-item">' + cliente.contactos[i].name + '<br>' + cliente.contactos[i].email + '<br>' + cliente.contactos[i].phoneNumber + '</li>';
+	};
+	$('#listaDireccionesAcordeon').html(address);
+	$('#listaContactosAcordeon').html(contacts);
+}
 
 /**Funciones de Direcciones */
 function AddressClient(id) {
@@ -66,6 +170,62 @@ function AddressClient(id) {
 	$('#titleModalDirecciones').html("Direcciones de " + cliente.name);
 	crearDireccion();
 	$('#direccionesModal').modal('show');
+}
+
+function loadUpdateAddress(idAddress) {
+	if (idAddress == 0) {
+		$('#direccionEditar').val("");
+		$('#ciudadesAddressListEdit option[value="0"]').prop('selected', 'selected');
+		return;
+	}
+	var cliente = findElement(clientes, 'idClient', $('#idClientAddress').val());
+	var direccion = findElement(cliente.direcciones, 'idAddress', idAddress);
+	$('#direccionEditar').val(direccion.direccion);
+	$("#ciudadesAddressListEdit option").filter(function () { return $(this).text() == '' + direccion.ciudad + ''; }).prop("selected", true);
+}
+
+function loadDeleteAddress(idAddress) {
+	var cliente = findElement(clientes, 'idClient', $('#idClientAddress').val());
+	var direccion = findElement(cliente.direcciones, 'idAddress', idAddress);
+	var data = "";
+	if (idAddress == 0) {
+		data += '<p><strong>Dirección: </strong><span></span></p>';
+		data += '<p><strong>Ciudad: </strong><span></span></p>';
+		$('#showDeleteAddressView').html(data);
+		return;
+	}
+	data += '<p><strong>Dirección: </strong><span>' + direccion.direccion + '</span></p>';
+	data += '<p><strong>Ciudad: </strong><span>' + direccion.ciudad + '</span></p>';
+	$('#showDeleteAddressView').html(data);
+}
+
+function borrarDireccion() {
+	var cliente = findElement(clientes, 'idClient', $('#idClientAddress').val());
+	$("#liBorrarDireccion").addClass("active");
+	$("#liCrearDireccion").removeClass("active");
+	$("#liEditarDireccion").removeClass("active");
+
+	var data = "";
+	data += '<form action="javascript:approvedDeleteAddress()">';
+	data += '<div class="form-group">';
+	data += '<h3>Borrar dirección</h3>';
+	data += '<p>Selecciona una dirección para borrarla.</p>';
+	data += '<label>Direcciones</label>';
+	data += '<select class="form-control" id="addressDeleteList">';
+	data += '<option value="0" onclick="loadDeleteAddress(0)">-- Seleccione la Dirección --</option>';
+	for (var i = 0; i < cliente.direcciones.length; i++) {
+		data += '<option value="' + cliente.direcciones[i].idAddress + '" onclick="loadDeleteAddress(' + cliente.direcciones[i].idAddress + ')">' + cliente.direcciones[i].direccion + '</option>';
+	};
+	data += '</select>';
+	data += '</div>';
+	data += '<div id="showDeleteAddressView"></div>';
+	data += '<div id="controlModal" class="btn-group btn-group-justified" role="group" aria-label="...">';
+	data += '<div class="btn-group" role="group">';
+	data += '<button class="btn btn-primary" type="submit">Confirmar Borrardo</button>';
+	data += '</div>';
+	data += '</div>';
+	data += '</form>';
+	$('#addressCrud').html(data);
 }
 
 function editarDireccion() {
@@ -80,11 +240,29 @@ function editarDireccion() {
 	data += '<p>Selecciona una dirección para editarla.</p>';
 	data += '<label>Direcciones</label>';
 	data += '<select class="form-control" id="addressEdit">';
-	data += '<option value="0">-- Seleccione la dirección --</option>';
+	data += '<option value="0" onclick="loadUpdateAddress(0)">-- Seleccione la dirección --</option>';
 	for (var i = 0; i < cliente.direcciones.length; i++) {
-		data += '<option value="' + cliente.direcciones[i].idAddress + '" onclick="loadUpdateContact(' + cliente.direcciones[i].idAddress + ')">' + cliente.direcciones[i].direccion + '</option>';
+		data += '<option value="' + cliente.direcciones[i].idAddress + '" onclick="loadUpdateAddress(' + cliente.direcciones[i].idAddress + ')">' + cliente.direcciones[i].direccion + '</option>';
 	};
 	data += '</select>';
+	data += '<div class="form-group">';
+	data += '<label for="inputForm">Dirección</label>';
+	data += '<input type="text" class="form-control" id="direccionEditar" placeholder="Dirección" required>';
+	data += '</div>';
+	data += '<div class="form-group">';
+	data += '<label>Ciudades</label>';
+	data += '<select class="form-control" id="ciudadesAddressListEdit">';
+	data += '<option value="0">-- Seleccionela ciudad --</option>';
+	for (var i = 0; i < ciudades.length; i++) {
+		data += '<option value="' + ciudades[i].idCity + '">' + ciudades[i].name + '</option>';
+	};
+	data += '</select>';
+	data += '</div>';
+	data += '<div id="controlModal" class="btn-group btn-group-justified" role="group" aria-label="...">';
+	data += '<div class="btn-group" role="group">';
+	data += '<button type="submit" class="btn btn-primary">Editar Dirección</button>';
+	data += '</div>';
+	data += '</div>';
 	data += '</div>';
 	data += '</form>';
 	$('#addressCrud').html(data);
@@ -120,14 +298,6 @@ function crearDireccion() {
 };
 
 function approvedCreateAddress() {
-
-	var address = newDinamicOWS(false);
-
-	if ($('#ciudadesAddressList').val() == 0) {
-		address.showMessage('msCRUDAddress', 'nameEmployed', "Selecciona una ciudad.", 'warning', 'default', true);
-		return;
-	}
-
 	var dataAndAccount = {
 		"username": sessionStorage.username,
 		"logincode": sessionStorage.logincode,
@@ -135,20 +305,81 @@ function approvedCreateAddress() {
 		"idCity": $('#ciudadesAddressList').val(),
 		"idClient": $('#idClientAddress').val()
 	};
-
+	var address = newDinamicOWS(false);
+	if ($('#ciudadesAddressList').val() == 0) {
+		address.showMessage('msCRUDAddress', 'nameEmployed', "Selecciona una ciudad.", 'warning', 'default', true);
+		return;
+	}
 	if (notBlakSpaceValidation(dataAndAccount.address) == false) {
 		address.showMessage('msCRUDAddress', 'nameEmployed', "Ingresa una dirección.", 'warning', 'default', true);
 		return;
 	}
-
 	var data = address.add(createAddressService, dataAndAccount, '');
-
 	if (data.success == 'false') {
 		address.showMessage('msCRUDAddress', 'nameEmployed', 'No se pudo crear la dirección<br><strong>Motivo: </strong>' + data.status, 'warning', 'default', true);
 	} else {
 		$('#direccionesModal').modal('hide');
 		loadClientes();
 		address.showMessage('msCRUDClientes', 'nameEmployed', 'La dirección se creo con éxito:', 'success', 'default', true);
+	}
+}
+
+function approvedEditAddress() {
+	var addressUpDate = newDinamicOWS(false);
+	var idAddress = $('#addressEdit').val();
+
+	if (idAddress == 0) {
+		addressUpDate.showMessage('msCRUDAddress', 'nameEmployed', "Selecciona una dirección valida.", 'warning', 'default', true);
+		return;
+	}
+
+	var cliente = findElement(clientes, 'idClient', $('#idClientAddress').val());
+	var direccion = findElement(cliente.direcciones, 'idAddress', idAddress);
+
+	var dataAndAccount = {
+		"username": sessionStorage.username,
+		"logincode": sessionStorage.logincode,
+		"idAddress": direccion.idAddress,
+		"address": $('#direccionEditar').val(),
+		"idCity": $('#ciudadesAddressListEdit').val(),
+		"idClient": $('#idClientAddress').val()
+	};
+
+	if (notBlakSpaceValidation(dataAndAccount.address) == false) {
+		addressUpDate.showMessage('msCRUDAddress', 'nameEmployed', "Ingresa una dirección", 'warning', 'default', true);
+		return;
+	}
+
+	var data = addressUpDate.set(editAddressService, dataAndAccount, '');
+	if (data.success == 'false') {
+		addressUpDate.showMessage('msCRUDAddress', 'nameEmployed', 'No se pudo editar la dirección<br><strong>Motivo: </strong>' + data.status, 'warning', 'default', true);
+	} else {
+		$('#direccionesModal').modal('hide');
+		loadClientes();
+		addressUpDate.showMessage('msCRUDClientes', 'nameEmployed', 'Se editó la dirección con éxito:', 'success', 'default', true);
+	}
+
+}
+
+function approvedDeleteAddress() {
+	var addressDelete = newDinamicOWS(false);
+	var idAddress = $('#addressDeleteList').val();
+	if (idAddress == 0) {
+		addressDelete.showMessage('msCRUDAddress', 'nameEmployed', 'Selecciona una dirección valida.', 'warning', 'default', true);
+		return;
+	}
+	var dataAndAccount = {
+		"username": sessionStorage.username,
+		"logincode": sessionStorage.logincode,
+		"idAddress": idAddress
+	};
+	var data = addressDelete.remove(deleteAddressService, dataAndAccount, '');
+	if (data.success == 'false') {
+		addressDelete.showMessage('msCRUDAddress', 'nameEmployed', 'No se pudo borrar la dirección<br><strong>Motivo: </strong>' + data.status, 'warning', 'default', true);
+	} else {
+		$('#direccionesModal').modal('hide');
+		loadClientes();
+		addressDelete.showMessage('msCRUDClientes', 'nameEmployed', 'La dirección se ha borrado con éxito.', 'success', 'default', true);
 	}
 }
 
@@ -201,7 +432,7 @@ function editarContacto() {
 	data += '<p>Selecciona un contacto para editarlo.</p>';
 	data += '<label>Contactos</label>';
 	data += '<select class="form-control" id="contactEdit">';
-	data += '<option value="0">-- Seleccione el Contacto --</option>';
+	data += '<option value="0" onclick="loadUpdateContact(0)">-- Seleccione el Contacto --</option>';
 	for (var i = 0; i < cliente.contactos.length; i++) {
 		data += '<option value="' + cliente.contactos[i].idContact + '" onclick="loadUpdateContact(' + cliente.contactos[i].idContact + ')">' + cliente.contactos[i].name + '</option>';
 	};
@@ -236,7 +467,7 @@ function borrarContacto() {
 	var data = "";
 	data += '<form action="javascript:approvedDeleteContact()">';
 	data += '<div class="form-group">';
-	data += '<h3>Editar Contacto</h3>';
+	data += '<h3>Borrar Contacto</h3>';
 	data += '<p>Selecciona un contacto para borrarlo.</p>';
 	data += '<label>Contactos</label>';
 	data += '<select class="form-control" id="contactDeleteList">';
@@ -342,10 +573,14 @@ function approvedEditContact() {
 }
 
 function loadUpdateContact(idContact) {
-	if (idContact == 0) return;
+	if (idContact == 0) {
+		$('#nombreContactoEditar').val("");
+		$('#emailContactoEditar').val("");
+		$('#telefonoContactoEditar').val("");
+		return;
+	}
 	var cliente = findElement(clientes, 'idClient', $('#idClientContact').val());
 	var contacto = findElement(cliente.contactos, 'idContact', idContact);
-	console.log("Datos carga form update " + contacto.name + " " + contacto.email + " " + contacto.phoneNumber);
 	$('#nombreContactoEditar').val(contacto.name);
 	$('#emailContactoEditar').val(contacto.email);
 	$('#telefonoContactoEditar').val(contacto.phoneNumber);
@@ -377,8 +612,6 @@ function approvedCreateContact() {
 		contact.showMessage('msCRUDContact', 'nameEmployed', "Ingrese un telefono.", 'warning', 'default', true);
 		return;
 	}
-
-	console.log("Los datos son: " + dataAndAccount.name + " " + dataAndAccount.email + " " + dataAndAccount.phoneNumber + " " + dataAndAccount.idClient);
 
 	var data = contact.add(createContactService, dataAndAccount, '');
 	if (data.success == 'false') {
@@ -422,7 +655,6 @@ function approvedCreateClient() {
 		return;
 	}
 
-	console.log("Los datos son: " + dataAndAccount.dv + " " + dataAndAccount.description + " " + dataAndAccount.name + " " + dataAndAccount.nit);
 	if (dvValidation(dataAndAccount.dv) == false) {
 		client.showMessage('msClientCreate', 'nameEmployed', "El digito de verificacion es incorrecto.", 'warning', 'default', true);
 		return;
