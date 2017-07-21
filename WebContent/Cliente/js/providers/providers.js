@@ -387,32 +387,32 @@ function approvedDeleteAddressProvider() {
 }
 
 /**Funciones de contacto*/
-function ContactClient(id) {
-	var cliente = findElement(proveedores, 'idClient', id);
-	$('#idClientContact').val(id);
-	$('#titleModalContact').html("Contactos de " + cliente.name);
-	crearContacto();
-	$('#contactosModal').modal('show');
+function ContactProvider(id) {
+	var proveedor = findElement(proveedores, 'idProvider', id);
+	$('#idProviderContact').val(id);
+	$('#titleModalContactProvider').html("Contactos de " + proveedor.name);
+	crearContactoProvider();
+	$('#contactosModalProvider').modal('show');
 }
 
-function crearContacto() {
-	$("#liCrearContacto").addClass("active");
-	$("#liEditarContacto").removeClass("active");
-	$("#liBorrarContacto").removeClass("active");
+function crearContactoProvider() {
+	$("#liCrearContactoProvider").addClass("active");
+	$("#liEditarContactoProvider").removeClass("active");
+	$("#liBorrarContactoProvider").removeClass("active");
 	var data = "";
-	data += '<form action="javascript:approvedCreateContact()">';
+	data += '<form action="javascript:approvedCreateContactProvider()">';
 	data += '<h3>Crear Contacto</h3>';
 	data += '<div class="form-group">';
 	data += '<label for="inputForm">Nombre</label>';
-	data += '<input type="text" class="form-control" id="nombreContactoCrear" placeholder="Nombre" required>';
+	data += '<input type="text" class="form-control" id="nombreContactoCrearProvider" placeholder="Nombre" required>';
 	data += '</div>';
 	data += '<div class="form-group">';
 	data += '<label for="inputForm">Correo Electronico</label>';
-	data += '<input type="email" class="form-control" id="emailContactoCrear" placeholder="Email" required>';
+	data += '<input type="email" class="form-control" id="emailContactoCrearProvider" placeholder="Email" required>';
 	data += '</div>';
 	data += '<div class="form-group">';
 	data += '<label for="inputForm">Telefono</label>';
-	data += '<input type="text" class="form-control" id="telefonoContactoCrear" placeholder="Telefono" required>';
+	data += '<input type="text" class="form-control" id="telefonoContactoCrearProvider" placeholder="Telefono" required>';
 	data += '</div>';
 	data += '<div class="btn-group btn-group-justified" role="group" aria-label="...">';
 	data += '<div class="btn-group" role="group">';
@@ -420,38 +420,38 @@ function crearContacto() {
 	data += '</div>';
 	data += '</div>';
 	data += '</form>';
-	$('#contactCrud').html(data);
+	$('#contactCrudProvider').html(data);
 };
 
-function editarContacto() {
-	var cliente = findElement(proveedores, 'idClient', $('#idClientContact').val());
-	$("#liEditarContacto").addClass("active");
-	$("#liCrearContacto").removeClass("active");
-	$("#liBorrarContacto").removeClass("active");
+function editarContactoProvider() {
+	var proveedor = findElement(proveedores, 'idClient', $('#idClientContact').val());
+	$("#liEditarContactoProvider").addClass("active");
+	$("#liCrearContactoProvider").removeClass("active");
+	$("#liBorrarContactoProvider").removeClass("active");
 	var data = "";
-	data += '<form action="javascript:approvedEditContact()">';
+	data += '<form action="javascript:approvedEditContactProvider()">';
 	data += '<div class="form-group">';
 	data += '<h3>Editar Contacto</h3>';
 	data += '<p>Selecciona un contacto para editarlo.</p>';
 	data += '<label>Contactos</label>';
-	data += '<select class="form-control" id="contactEdit">';
-	data += '<option value="0" onclick="loadUpdateContact(0)">-- Seleccione el Contacto --</option>';
-	for (var i = 0; i < cliente.contactos.length; i++) {
-		data += '<option value="' + cliente.contactos[i].idContact + '" onclick="loadUpdateContact(' + cliente.contactos[i].idContact + ')">' + cliente.contactos[i].name + '</option>';
+	data += '<select class="form-control" id="contactEditProvider">';
+	data += '<option value="0" onclick="loadUpdateContactProvider(0)">-- Seleccione el Contacto --</option>';
+	for (var i = 0; i < proveedor.contacts.length; i++) {
+		data += '<option value="' + proveedor.contacts[i].idContact + '" onclick="loadUpdateContactProvider(' + proveedor.contacts[i].idContact + ')">' + proveedor.contacts[i].name + '</option>';
 	};
 	data += '</select>';
 	data += '</div>';
 	data += '<div class="form-group">';
 	data += '<label for="inputForm">Nombre</label>';
-	data += '<input type="text" class="form-control" id="nombreContactoEditar" placeholder="Nombre" required>';
+	data += '<input type="text" class="form-control" id="nombreContactoEditarProvider" placeholder="Nombre" required>';
 	data += '</div>';
 	data += '<div class="form-group">';
 	data += '<label for="inputForm">Correo Electronico</label>';
-	data += '<input type="email" class="form-control" id="emailContactoEditar" placeholder="Email" required>';
+	data += '<input type="email" class="form-control" id="emailContactoEditarProvider" placeholder="Email" required>';
 	data += '</div>';
 	data += '<div class="form-group">';
 	data += '<label for="inputForm">Telefono</label>';
-	data += '<input type="text" class="form-control" id="telefonoContactoEditar" placeholder="Telefono" required>';
+	data += '<input type="text" class="form-control" id="telefonoContactoEditarProvider" placeholder="Telefono" required>';
 	data += '</div>';
 	data += '<div class="btn-group btn-group-justified" role="group" aria-label="...">';
 	data += '<div class="btn-group" role="group">';
@@ -459,24 +459,24 @@ function editarContacto() {
 	data += '</div>';
 	data += '</div>';
 	data += '</form>';
-	$('#contactCrud').html(data);
+	$('#contactCrudProvider').html(data);
 }
 
-function borrarContacto() {
-	$("#liBorrarContacto").addClass("active");
-	$("#liEditarContacto").removeClass("active");
-	$("#liCrearContacto").removeClass("active");
-	var cliente = findElement(proveedores, 'idClient', $('#idClientContact').val());
+function borrarContactoProvider() {
+	$("#liBorrarContactoProvider").addClass("active");
+	$("#liEditarContactoProvider").removeClass("active");
+	$("#liCrearContactoProvider").removeClass("active");
+	var proveedor = findElement(proveedores, 'idProvider', $('#idProviderContact').val());
 	var data = "";
-	data += '<form action="javascript:approvedDeleteContact()">';
+	data += '<form action="javascript:approvedDeleteContactProvider()">';
 	data += '<div class="form-group">';
 	data += '<h3>Borrar Contacto</h3>';
 	data += '<p>Selecciona un contacto para borrarlo.</p>';
 	data += '<label>Contactos</label>';
-	data += '<select class="form-control" id="contactDeleteList">';
-	data += '<option value="0">-- Seleccione el Contacto --</option>';
-	for (var i = 0; i < cliente.contactos.length; i++) {
-		data += '<option value="' + cliente.contactos[i].idContact + '" onclick="showDeleteContact(' + cliente.contactos[i].idContact + ')">' + cliente.contactos[i].name + '</option>';
+	data += '<select class="form-control" id="contactDeleteListProvider">';
+	data += '<option value="0" onclick="showDeleteContactProvider(0)">-- Seleccione el Contacto --</option>';
+	for (var i = 0; i < proveedor.contacts.length; i++) {
+		data += '<option value="' + proveedor.contacts[i].idContact + '" onclick="showDeleteContactProvider(' + proveedor.contacts[i].idContact + ')">' + proveedor.contacts[i].name + '</option>';
 	};
 	data += '</select>';
 	data += '</div>';
@@ -487,29 +487,32 @@ function borrarContacto() {
 	data += '</div>';
 	data += '</div>';
 	data += '</form>';
-	$('#contactCrud').html(data);
+	$('#contactCrudProvider').html(data);
 }
 
-function showDeleteContact(idContact) {
-	var contactDelete = newDinamicOWS(false);
+function showDeleteContactProvider(idContact) {
+	var data = "";
 	if (idContact == 0) {
-		contactDelete.showMessage('msCRUDContact', 'nameEmployed', "Selecciona un Contacto.", 'warning', 'default', true);
+		data += '<p><strong>Nombre: </strong><span></span></p>';
+		data += '<p><strong>Correo: </strong><span></span></p>';
+		data += '<p><strong>Telefono: </strong><span></span></p>';
+		$('#showDeleteContactView').html(data);
 		return;
 	}
-	var cliente = findElement(proveedores, 'idClient', $('#idClientContact').val());
-	var contacto = findElement(cliente.contactos, 'idContact', idContact);
-	var data = "";
+	var proveedor = findElement(proveedores, 'idClient', $('#idClientContact').val());
+	var contacto = findElement(proveedor.contacts, 'idContact', idContact);
+
 	data += '<p><strong>Nombre: </strong><span>' + contacto.name + '</span></p>';
 	data += '<p><strong>Correo: </strong><span>' + contacto.email + '</span></p>';
 	data += '<p><strong>Telefono: </strong><span>' + contacto.phoneNumber + '</span></p>';
 	$('#showDeleteContactView').html(data);
 }
 
-function approvedDeleteContact() {
+function approvedDeleteContactProvider() {
 	var contactDelete = newDinamicOWS(false);
-	var idContact = $('#contactDeleteList').val();
+	var idContact = $('#contactDeleteListProvider').val();
 	if (idContact == 0) {
-		contactDelete.showMessage('msCRUDContact', 'nameEmployed', 'Selecciona un contacto valido.', 'warning', 'default', true);
+		contactDelete.showMessage('msCRUDContactProvider', 'nameEmployed', 'Selecciona un contacto valido.', 'warning', 'default', true);
 		return;
 	}
 	var dataAndAccount = {
@@ -519,110 +522,110 @@ function approvedDeleteContact() {
 	};
 	var data = contactDelete.remove(deleteContactService, dataAndAccount, '');
 	if (data.success == 'false') {
-		contactDelete.showMessage('msCRUDContact', 'nameEmployed', 'No se pudo borrar el contacto<br><strong>Motivo: </strong>' + data.status, 'warning', 'default', true);
+		contactDelete.showMessage('msCRUDContactProvider', 'nameEmployed', 'No se pudo borrar el contacto<br><strong>Motivo: </strong>' + data.status, 'warning', 'default', true);
 	} else {
-		$('#contactosModal').modal('hide');
+		$('#contactosModalProvider').modal('hide');
 		loadProveedores();
 		contactDelete.showMessage('msCRUDProvider', 'nameEmployed', 'El contacto se ha borrado con éxito.', 'success', 'default', true);
 	}
 }
 
-function approvedEditContact() {
+function approvedEditContactProvider() {
 	var contactUpDate = newDinamicOWS(false);
-	var idContact = $('#contactEdit').val();
+	var idContact = $('#contactEditProvider').val();
 
 	if (idContact == 0) {
-		contactUpDate.showMessage('msCRUDContact', 'nameEmployed', "Selecciona un Contacto valido.", 'warning', 'default', true);
+		contactUpDate.showMessage('msCRUDContactProvider', 'nameEmployed', "Selecciona un Contacto valido.", 'warning', 'default', true);
 		return;
 	}
 
-	var cliente = findElement(proveedores, 'idClient', $('#idClientContact').val());
-	var contacto = findElement(cliente.contactos, 'idContact', idContact);
+	var proveedor = findElement(proveedores, 'idProvider', $('#idProviderContact').val());
+	var contacto = findElement(proveedor.contacts, 'idContact', idContact);
 
 	var dataAndAccount = {
 		"username": sessionStorage.username,
 		"logincode": sessionStorage.logincode,
-		"idClient": contacto.idClient,
+		"idProvider": contacto.idProvider,
 		"idContact": contacto.idContact,
-		"name": $('#nombreContactoEditar').val(),
-		"email": $('#emailContactoEditar').val(),
-		"phoneNumber": $('#telefonoContactoEditar').val()
+		"name": $('#nombreContactoEditarProvider').val(),
+		"email": $('#emailContactoEditarProvider').val(),
+		"phoneNumber": $('#telefonoContactoEditarProvider').val()
 	};
 
 	if (notBlakSpaceValidation(dataAndAccount.name) == false) {
-		contactUpDate.showMessage('msCRUDContact', 'nameEmployed', "Ingresa un nombre", 'warning', 'default', true);
+		contactUpDate.showMessage('msCRUDContactProvider', 'nameEmployed', "Ingresa un nombre", 'warning', 'default', true);
 		return;
 	}
 
 	if (emailValidation(dataAndAccount.email) == false) {
-		contactUpDate.showMessage('msCRUDContact', 'nameEmployed', "Ingrese un correo valido", 'warning', 'default', true);
+		contactUpDate.showMessage('msCRUDContactProvider', 'nameEmployed', "Ingrese un correo valido", 'warning', 'default', true);
 		return;
 	}
 
 	if (notBlakSpaceValidation(dataAndAccount.phoneNumber) == false) {
-		contactUpDate.showMessage('msCRUDContact', 'nameEmployed', "Ingrese un telefono valido.", 'warning', 'default', true);
+		contactUpDate.showMessage('msCRUDContactProvider', 'nameEmployed', "Ingrese un telefono valido.", 'warning', 'default', true);
 		return;
 	}
 
 	var data = contactUpDate.set(editContactService, dataAndAccount, '');
 	if (data.success == 'false') {
-		contactUpDate.showMessage('msCRUDContact', 'nameEmployed', 'No se pudo editar el contacto<br><strong>Motivo: </strong>' + data.status, 'warning', 'default', true);
+		contactUpDate.showMessage('msCRUDContactProvider', 'nameEmployed', 'No se pudo editar el contacto<br><strong>Motivo: </strong>' + data.status, 'warning', 'default', true);
 	} else {
-		$('#contactosModal').modal('hide');
+		$('#contactosModalProvider').modal('hide');
 		loadProveedores();
-		contactUpDate.showMessage('msCRUDProvider', 'nameEmployed', 'Se editó el contacto con exito:', 'success', 'default', true);
+		contactUpDate.showMessage('msCRUDProvider', 'nameEmployed', 'Se editó el contacto con éxito:', 'success', 'default', true);
 	}
 
 }
 
-function loadUpdateContact(idContact) {
+function loadUpdateContactProvider(idContact) {
 	if (idContact == 0) {
-		$('#nombreContactoEditar').val("");
-		$('#emailContactoEditar').val("");
-		$('#telefonoContactoEditar').val("");
+		$('#nombreContactoEditarProvider').val("");
+		$('#emailContactoEditarProvider').val("");
+		$('#telefonoContactoEditarProvider').val("");
 		return;
 	}
-	var cliente = findElement(proveedores, 'idClient', $('#idClientContact').val());
-	var contacto = findElement(cliente.contactos, 'idContact', idContact);
-	$('#nombreContactoEditar').val(contacto.name);
-	$('#emailContactoEditar').val(contacto.email);
-	$('#telefonoContactoEditar').val(contacto.phoneNumber);
+	var proveedor = findElement(proveedores, 'idProvider', $('#idProviderContact').val());
+	var contacto = findElement(proveedor.contacts, 'idContact', idContact);
+	$('#nombreContactoEditarProvider').val(contacto.name);
+	$('#emailContactoEditarProvider').val(contacto.email);
+	$('#telefonoContactoEditarProvider').val(contacto.phoneNumber);
 }
 
-function approvedCreateContact() {
+function approvedCreateContactProvider() {
 	var dataAndAccount = {
 		"username": sessionStorage.username,
 		"logincode": sessionStorage.logincode,
-		"idClient": $('#idClientContact').val(),
-		"name": $('#nombreContactoCrear').val(),
-		"email": $('#emailContactoCrear').val(),
-		"phoneNumber": $('#telefonoContactoCrear').val()
+		"idProvider": $('#idProviderContact').val(),
+		"name": $('#nombreContactoCrearProvider').val(),
+		"email": $('#emailContactoCrearProvider').val(),
+		"phoneNumber": $('#telefonoContactoCrearProvider').val()
 	};
 
-	var contact = newDinamicOWS(false);
+	var provider = newDinamicOWS(false);
 
 	if (notBlakSpaceValidation(dataAndAccount.name) == false) {
-		contact.showMessage('msCRUDContact', 'nameEmployed', "Ingresa un nombre.", 'warning', 'default', true);
+		provider.showMessage('msCRUDContactProvider', 'nameEmployed', "Ingresa un nombre.", 'warning', 'default', true);
 		return;
 	}
 
 	if (emailValidation(dataAndAccount.email) == false) {
-		contact.showMessage('msCRUDContact', 'nameEmployed', "Ingrese un correo valido.", 'warning', 'default', true);
+		provider.showMessage('msCRUDContactProvider', 'nameEmployed', "Ingrese un correo valido.", 'warning', 'default', true);
 		return;
 	}
 
 	if (notBlakSpaceValidation(dataAndAccount.phoneNumber) == false) {
-		contact.showMessage('msCRUDContact', 'nameEmployed', "Ingrese un telefono.", 'warning', 'default', true);
+		provider.showMessage('msCRUDContactProvider', 'nameEmployed', "Ingrese un telefono.", 'warning', 'default', true);
 		return;
 	}
 
-	var data = contact.add(createContactService, dataAndAccount, '');
+	var data = provider.add(createContactService, dataAndAccount, '');
 	if (data.success == 'false') {
-		contact.showMessage('msCRUDContact', 'nameEmployed', 'No se pudo crear el contacto<br><strong>Motivo: </strong>' + data.status, 'warning', 'default', true);
+		provider.showMessage('msCRUDContactProvider', 'nameEmployed', 'No se pudo crear el contacto<br><strong>Motivo: </strong>' + data.status, 'warning', 'default', true);
 	} else {
-		$('#contactosModal').modal('hide');
+		$('#contactosModalProvider').modal('hide');
 		loadProveedores();
-		contact.showMessage('msCRUDProvider', 'nameEmployed', 'El contacto se creo con éxito:', 'success', 'default', true);
+		provider.showMessage('msCRUDProvider', 'nameEmployed', 'El contacto se creo con éxito:', 'success', 'default', true);
 	}
 }
 

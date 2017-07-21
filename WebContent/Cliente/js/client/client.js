@@ -471,7 +471,7 @@ function borrarContacto() {
 	data += '<p>Selecciona un contacto para borrarlo.</p>';
 	data += '<label>Contactos</label>';
 	data += '<select class="form-control" id="contactDeleteList">';
-	data += '<option value="0">-- Seleccione el Contacto --</option>';
+	data += '<option value="0" onclick="showDeleteContact(0)">-- Seleccione el Contacto --</option>';
 	for (var i = 0; i < cliente.contactos.length; i++) {
 		data += '<option value="' + cliente.contactos[i].idContact + '" onclick="showDeleteContact(' + cliente.contactos[i].idContact + ')">' + cliente.contactos[i].name + '</option>';
 	};
@@ -488,14 +488,17 @@ function borrarContacto() {
 }
 
 function showDeleteContact(idContact) {
-	var contactDelete = newDinamicOWS(false);
+	var data = "";
 	if (idContact == 0) {
-		contactDelete.showMessage('msCRUDContact', 'nameEmployed', "Selecciona un Contacto.", 'warning', 'default', true);
+		data += '<p><strong>Nombre: </strong><span></span></p>';
+		data += '<p><strong>Correo: </strong><span></span></p>';
+		data += '<p><strong>Telefono: </strong><span></span></p>';
+		$('#showDeleteContactView').html(data);
 		return;
 	}
 	var cliente = findElement(clientes, 'idClient', $('#idClientContact').val());
 	var contacto = findElement(cliente.contactos, 'idContact', idContact);
-	var data = "";
+
 	data += '<p><strong>Nombre: </strong><span>' + contacto.name + '</span></p>';
 	data += '<p><strong>Correo: </strong><span>' + contacto.email + '</span></p>';
 	data += '<p><strong>Telefono: </strong><span>' + contacto.phoneNumber + '</span></p>';
