@@ -1,26 +1,26 @@
 package vo.vista;
 
-public class AddressListJSON {
+public class AddressListProviderJSON {
 	private long   idAddress;	
 	private String direccion;
 	private String ciudad;
 	private String pais;
-	private long idClient;
+	private long idProvider;
 	
-	public AddressListJSON() {}
-	public AddressListJSON(long idAddress, long idClient, String direccion, String ciudad, String pais) {
+	public AddressListProviderJSON() {}
+	public AddressListProviderJSON(long idAddress, long idProvider, String direccion, String ciudad, String pais) {
 		this.idAddress = idAddress;
 		this.direccion = direccion;
 		this.ciudad = ciudad;
 		this.pais = pais;
-		this.idClient = idClient;
+		this.idProvider = idProvider;
 	}
 	
-	public long getIdClient() {
-		return idClient;
+	public long getIdProvider() {
+		return idProvider;
 	}
-	public void setIdClient(long idClient) {
-		this.idClient = idClient;
+	public void setIdProvider(long idProvider) {
+		this.idProvider = idProvider;
 	}
 	public long getIdAddress() {
 		return idAddress;
@@ -49,7 +49,7 @@ public class AddressListJSON {
 	@Override
 	public String toString() {
 		return "AddressListJSON [idAddress=" + idAddress + ", direccion=" + direccion + ", ciudad=" + ciudad + ", pais="
-				+ pais + ", idClient=" + idClient + "]";
+				+ pais + ", idClient=" + idProvider + "]";
 	}
 
 }

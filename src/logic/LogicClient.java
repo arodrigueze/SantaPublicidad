@@ -15,7 +15,7 @@ import vo.Client;
 import vo.Contact;
 import vo.Country;
 import vo.Project;
-import vo.vista.AddressListJSON;
+import vo.vista.AddressListClientJSON;
 import vo.vista.ClientListJSON;
 
 public class LogicClient {
@@ -28,7 +28,7 @@ public class LogicClient {
 		List<City>           ciudades     = DAOCity.getCities();
 		List<Country>        paises       = DAOCountry.getCountry();
 		List<ClientListJSON> clienteVista = new ArrayList<>();
-		List<AddressListJSON>addressVista = new ArrayList<>();
+		List<AddressListClientJSON>addressVista = new ArrayList<>();
 		
 		if (clientes!=null && direcciones !=null && contactos!=null && paises!=null && ciudades!=null) {
 			
@@ -42,7 +42,7 @@ public class LogicClient {
 			}
 			//cargar las direccionones vista que van en clientesvista
 			for (int i = 0; i < direcciones.size(); i++) {
-				AddressListJSON dir = new AddressListJSON(direcciones.get(i).getIdAddress(),direcciones.get(i).getIdClient(), direcciones.get(i).getAddress(), "", "");
+				AddressListClientJSON dir = new AddressListClientJSON(direcciones.get(i).getIdAddress(),direcciones.get(i).getIdClient(), direcciones.get(i).getAddress(), "", "");
 				for (int j = 0; j < ciudades.size(); j++) {
 					if (direcciones.get(i).getIdCity()==ciudades.get(j).getIdCity()) {
 						dir.setCiudad(ciudades.get(j).getName());

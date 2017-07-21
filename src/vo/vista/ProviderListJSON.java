@@ -14,7 +14,7 @@ public class ProviderListJSON {
 	private int DV;
 	private List<ProductService> productServices;
 	private List<Contact> contacts;
-	private List<AddressListJSON> address;
+	private List<AddressListProviderJSON> address;
 		
 	public ProviderListJSON(long idProvider, String nIT, String name, String description, int dv) {
 		this.DV = dv;
@@ -70,10 +70,10 @@ public class ProviderListJSON {
 	public void addContact(Contact contacts) {
 		this.contacts.add(contacts);
 	}
-	public List<AddressListJSON> getAddress() {
+	public List<AddressListProviderJSON> getAddress() {
 		return address;
 	}
-	public void addAddress(AddressListJSON address) {
+	public void addAddress(AddressListProviderJSON address) {
 		this.address.add(address);
 	}
 	@Override

@@ -30,8 +30,8 @@ public class WebServiceProvider {
 	          @DefaultValue("null") @QueryParam("username") String username, 
 	          @DefaultValue("null") @QueryParam("logincode") String logincode
 	          ) {
-		System.out.println(new Date()+":\n\tRemote Address: "+request.getRemoteAddr()+", Local Address: "+request.getLocalAddr());
-		System.out.println("\tAttempt to validate log in from : "+referer);
+		System.out.println(new Date()+":\n\nRemote Address: "+request.getRemoteAddr()+", Local Address: "+request.getLocalAddr());
+		System.out.println("\nAttempt to validate log in from : "+referer);
 		System.out.print("\nEN LISTAR PROVEEDORES");
 		int verifyAccess = ConnectionData.verifyAccess(referer);
 		if( verifyAccess != -1){
@@ -63,14 +63,14 @@ public class WebServiceProvider {
 	public Response createProvider(@Context HttpServletRequest request, @HeaderParam("Referer") String referer,
 			  @DefaultValue("null") @QueryParam("nit") String nit, 
 			  @DefaultValue("null") @QueryParam("name") String name,
-			  @DefaultValue("null") @QueryParam("DV") String dv,
+			  @DefaultValue("null") @QueryParam("dv") String dv,
 			  @DefaultValue("null") @QueryParam("description") String description,
 	          @DefaultValue("null") @QueryParam("logincode") String logincode,
 	          @DefaultValue("null") @QueryParam("username") String username
 	          ) {
-		System.out.println(new Date()+":\n\tRemote Address: "+request.getRemoteAddr()+", Local Address: "+request.getLocalAddr());
-		System.out.println("\tAttempt to validate log in from : "+referer);
-		System.out.print("\tEn CREAR PROVEEDOR");
+		System.out.println(new Date()+":\n\nRemote Address: "+request.getRemoteAddr()+", Local Address: "+request.getLocalAddr());
+		System.out.println("\nAttempt to validate log in from : "+referer);
+		System.out.print("\nEn CREAR PROVEEDOR");
 		int verifyAccess = ConnectionData.verifyAccess(referer);
 		if( verifyAccess != -1){
 			System.out.print(", Access granted");  
@@ -106,9 +106,9 @@ public class WebServiceProvider {
 	          @DefaultValue("null") @QueryParam("logincode") String logincode,
 	          @DefaultValue("null") @QueryParam("username") String username
 	          ) {
-		System.out.print(new Date()+":\n\tRemote Address: "+request.getRemoteAddr()+", Local Address: "+request.getLocalAddr());
-		System.out.print("\tAttempt to validate log in from : "+referer);
-		System.out.print("\tEn EDITAR PROVEEDOR");
+		System.out.print(new Date()+":\n\nRemote Address: "+request.getRemoteAddr()+", Local Address: "+request.getLocalAddr());
+		System.out.print("\nAttempt to validate log in from : "+referer);
+		System.out.print("\nEn EDITAR PROVEEDOR");
 		int verifyAccess = ConnectionData.verifyAccess(referer);
 		if( verifyAccess != -1){
 			System.out.print(", Access granted");  
@@ -140,9 +140,9 @@ public class WebServiceProvider {
 			  @DefaultValue("null") @QueryParam("username") String username,
 	          @DefaultValue("null") @QueryParam("logincode") String logincode
 	          ) {
-		System.out.print(new Date()+":\n\tRemote Address: "+request.getRemoteAddr()+", Local Address: "+request.getLocalAddr());
-		System.out.print("\tAttempt to validate log in from : "+referer);
-		System.out.print("\tBORRAR PROVEEDOR");
+		System.out.print(new Date()+":\n\nRemote Address: "+request.getRemoteAddr()+", Local Address: "+request.getLocalAddr());
+		System.out.print("\nAttempt to validate log in from : "+referer);
+		System.out.print("\nBORRAR PROVEEDOR");
 		int verifyAccess = ConnectionData.verifyAccess(referer);
 		if( verifyAccess != -1){
 			System.out.print(", Access granted");  

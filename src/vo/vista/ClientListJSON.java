@@ -8,7 +8,7 @@ import vo.Project;
 public class ClientListJSON {
 	
 	private List<Contact> contactos;
-	private List<AddressListJSON> direcciones;
+	private List<AddressListClientJSON> direcciones;
 	private List<Project> proyectos;
 	private long idClient;
 	private String NIT;
@@ -37,11 +37,11 @@ public class ClientListJSON {
 		this.contactos.add(contacto);
 	}
 
-	public List<AddressListJSON> getDirecciones() {
+	public List<AddressListClientJSON> getDirecciones() {
 		return direcciones;
 	}
 
-	public void addDirecciones(AddressListJSON direccion) {
+	public void addDirecciones(AddressListClientJSON direccion) {
 		this.direcciones.add(direccion);
 	}
 

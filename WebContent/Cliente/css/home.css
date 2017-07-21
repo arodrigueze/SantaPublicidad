@@ -70,7 +70,14 @@ footer{
 #filtro{
 	margin: 50px;
 	margin-bottom: 0;
-	width: 22%;
+	width: 200px;
+}
+
+#createProviderButton{
+	margin: 50px;
+	margin-bottom: 0;
+	margin-top: 10px;;
+	width: 200px;
 }
 
 #lista{

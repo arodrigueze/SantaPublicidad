@@ -17,7 +17,7 @@ import vo.Contact;
 import vo.Country;
 import vo.ProductService;
 import vo.Provider;
-import vo.vista.AddressListJSON;
+import vo.vista.AddressListProviderJSON;
 import vo.vista.ProviderListJSON;
 
 public class LogicProvider {
@@ -25,6 +25,7 @@ public class LogicProvider {
 	public static JSONObject getProvidersJSON() {
 		JSONObject obj = new JSONObject();
 		List<ProviderListJSON> listaJson          = new ArrayList<>();
+		List<AddressListProviderJSON>  addressVista = new ArrayList<>();
 		List<Provider>         proveedores        = DAOProvider.getProvider();
 		List<ProductService>   productosServicios = DAOProductService.getProductService();
 		List<Contact>          contactos          = DAOContact.getContact();
@@ -45,6 +46,22 @@ public class LogicProvider {
 				ProviderListJSON providerJson = new ProviderListJSON(proveedores.get(i).getIdProvider(),proveedores.get(i).getNIT() , proveedores.get(i).getName(), proveedores.get(i).getDescription(), proveedores.get(i).getDV());
 				listaJson.add(providerJson);
 			}
+			for (int i = 0; i < direcciones.size(); i++) {
+				AddressListProviderJSON dir = new AddressListProviderJSON(direcciones.get(i).getIdAddress(),direcciones.get(i).getIdProvider(), direcciones.get(i).getAddress(), "", "");
+				for (int j = 0; j < ciudades.size(); j++) {
+					if (direcciones.get(i).getIdCity()==ciudades.get(j).getIdCity()) {
+						dir.setCiudad(ciudades.get(j).getName());
+						for (int k = 0; k < paises.size(); k++) {
+							if (ciudades.get(j).getIdCountry()==paises.get(k).getIdCountry()) {
+								dir.setPais(paises.get(k).getName());
+								break;
+							}
+						}
+						break;
+					}
+				}
+				addressVista.add(dir);
+			}
 			for (int i = 0; i < listaJson.size(); i++) {
 				for (int j = 0; j < productosServicios.size(); j++) {
 					if (productosServicios.get(j).getIdProvider()==listaJson.get(i).getIdProvider()) {
@@ -56,23 +73,13 @@ public class LogicProvider {
 						listaJson.get(i).addContact(contactos.get(j));;
 					}
 				}
-				for (int j = 0; j < direcciones.size(); j++) {
-					if (direcciones.get(j).getIdProvider()==listaJson.get(i).getIdProvider()) {
-						for (int j2 = 0;j2< ciudades.size(); j2++) {
-							if (direcciones.get(j).getIdCity()==ciudades.get(j2).getIdCity()) {
-								for (int k = 0; k < paises.size(); k++) {
-									if (ciudades.get(j2).getIdCountry()==paises.get(k).getIdCountry()) {
-										listaJson.get(i).addAddress(new AddressListJSON(direcciones.get(j).getIdAddress()
-																					, direcciones.get(j).getIdClient()
-																					, direcciones.get(j).getAddress()
-																					, ciudades.get(j2).getName()
-																					, paises.get(k).getName()));
-									}
-								}
-							}
-						}						
+				//Cargar las direccionesvista a los clientesvista
+				for (int j = 0; j < addressVista.size(); j++) {
+					if (listaJson.get(i).getIdProvider()==addressVista.get(j).getIdProvider()) {
+						listaJson.get(i).addAddress(addressVista.get(j));
 					}
 				}
+								
 			}
 			obj.putOnce("providers", listaJson);
 			return obj;
